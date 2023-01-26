@@ -55,7 +55,7 @@ Frameworks are flexible, and leverage your existing dev environment (IDE, git, e
 <details markdown>
 
 
-<summary>2. Manual Coding vs. Automation?  Yes.</summary>
+<summary>2. API Logic Server: automation, standard customization</summary>
 
 &nbsp;
 
@@ -81,7 +81,7 @@ The *API Logic Project No Customization* app provides an alternative, creating a
 <details markdown>
 
 
-<summary>3. Unique Declarative Logic and Security</summary>
+<summary>3. Api Logic Server: Unique Declarative Logic and Security</summary>
 
 &nbsp;
 
@@ -108,16 +108,16 @@ A unique feature of API Logic Server is provision for:
 
 | Tech Area | Skill | Basic Example | API Logic Server | Notes   |
 |:---- |:------|:-----------|:--------|:--------|
-| __Flask__ | Setup | [```flask_basic.py```](Basic_app/flask_basic.py) |  c | also shows end points, events  |
-|  | Events |  | [```api/customize_api.py```](ApiLogicProject/api_logic_server_run.py) | see `flask_events` |
-| __API__ | Create End Point | [```flask_basic.py```](Basic_app/flask_basic.py) | [```api/customize_api.py```](ApiLogicProject/api/customize_api.py) |  see `def order():` |
-|  | Call endpoint | [```test/.../place_order.py```](ApiLogicProject/test/api_logic_server_behave/features/steps/place_order.py) | x | y  |
+| __Flask__ | Setup | [```flask_basic.py```](Basic_app/flask_basic.py) |  [```api_logic_server_run.py```](ApiLogicProject/api_logic_server_run.py) |  |
+|  | Events |  | [```api/end_points.py```](Basic_app/api/end_points.py) | see `flask_events` |
+| __API__ | Create End Point | [```api/end_points.py```](Basic_app/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject/api/customize_api.py) |  see `def order():` |
+|  | Call endpoint |  | [```test/.../place_order.py```](ApiLogicProject/test/api_logic_server_behave/features/steps/place_order.py) | y  |
 | __Config__ | Config | [```config.py```](ApiLogicProject/config.py) | | x |
 |  | Env variables | [```config.py```](ApiLogicProject/config.py) | x | os.getenv(...)  |
 | __SQLAlchemy__ | Data Model Classes | [```database/customize_models.py```](ApiLogicProject/database/customize_models.py) |  | x  |
-|  | Read / Write | [```api/customize_api.py```](ApiLogicProject/api/customize_api.py) | x | see `def order():`  |
+|  | Read / Write | [```api/end_points.py```](Basic_app/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject/api/customize_api.py) | see `def order():`  |
 |  | Multiple Databases |  | [```database/bind_databases.py```](ApiLogicProject/database/bind_databases.py) |   |
-|  | Events | [```security/system/security_manager.py```](ApiLogicProject/security/system/security_manager.py) | | x  |
+|  | Events |  | [```security/system/security_manager.py```](ApiLogicProject/security/system/security_manager.py) | x  |
 | __Logic__ | Business Rules | n/a | [```logic/declare_logic.py```](ApiLogicProject/logic/declare_logic.py) | ***Unique*** to API Logic Server  |
 | __Security__ | Multi-tenant | n/a | [```security/declare_security.py```](ApiLogicProject/security/declare_security.py) |   |
 | __Behave__ | Testing |  | [```test/.../place_order.py```](ApiLogicProject/test/api_logic_server_behave/features/steps/place_order.py) | x  |
