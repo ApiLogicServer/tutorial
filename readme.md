@@ -109,12 +109,12 @@ A unique feature of API Logic Server is provision for:
 | Tech Area | Skill | Basic Example | API Logic Server | Notes   |
 |:---- |:------|:-----------|:--------|:--------|
 | __Flask__ | Setup | [```flask_basic.py```](Basic_app/flask_basic.py) |  [```api_logic_server_run.py```](ApiLogicProject/api_logic_server_run.py) |  |
-|  | Events |  | [```api/end_points.py```](Basic_app/api/end_points.py) | see `flask_events` |
+|  | Events | [```api/end_points.py```](Basic_app/api/end_points.py) |  [```ui/admin/admin_loader.py```](ApiLogicProject/ui/admin/admin_loader.py) |  |
 | __API__ | Create End Point | [```api/end_points.py```](Basic_app/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject/api/customize_api.py) |  see `def order():` |
 |  | Call endpoint |  | [```test/.../place_order.py```](ApiLogicProject/test/api_logic_server_behave/features/steps/place_order.py) | y  |
 | __Config__ | Config | [```config.py```](ApiLogicProject/config.py) | | x |
-|  | Env variables | [```config.py```](ApiLogicProject/config.py) | x | os.getenv(...)  |
-| __SQLAlchemy__ | Data Model Classes | [```database/customize_models.py```](ApiLogicProject/database/customize_models.py) |  | x  |
+|  | Env variables |  | [```config.py```](ApiLogicProject/config.py) | os.getenv(...)  |
+| __SQLAlchemy__ | Data Model Classes | [```database/models.py```](ApiLogicProject/database/models.py) |  | x  |
 |  | Read / Write | [```api/end_points.py```](Basic_app/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject/api/customize_api.py) | see `def order():`  |
 |  | Multiple Databases |  | [```database/bind_databases.py```](ApiLogicProject/database/bind_databases.py) |   |
 |  | Events |  | [```security/system/security_manager.py```](ApiLogicProject/security/system/security_manager.py) | x  |
