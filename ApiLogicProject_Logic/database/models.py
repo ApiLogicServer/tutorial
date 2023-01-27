@@ -306,7 +306,7 @@ class Order(SAFRSBase, Base):
     # see backref on parent: Employee = relationship('Employee', cascade_backrefs=True, backref='OrderList')
 
     parent = relationship('Order', remote_side=[Id], cascade_backrefs=True, backref='OrderList')  # special handling for self-relationships
-    OrderDetailList = relationship('OrderDetail', cascade_backrefs=True, backref='Order')
+    OrderDetailList = relationship('OrderDetail', cascade='all, delete', cascade_backrefs=True, backref='Order')  # manual fix
 
 
 class OrderDetail(SAFRSBase, Base):

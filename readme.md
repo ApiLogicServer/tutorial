@@ -83,7 +83,7 @@ The *API Logic Project No Customization* app provides an alternative, creating a
 
 * **Instant:** faster than Low Code screen painting, with instant APIs and Admin User Interfaces:
 
-  * **API:** an endpoint for each table, with filtering, sorting, pagination and related data access
+  * **API:** an endpoint for each table, with filtering, sorting, pagination and related data access.  Swagger is automatic.
 
   * **Admin UI:** multi-page / multi-table apps, with page navigations, automatic joins and declarative hide/show.  It executes a yaml file, so basic customizations do not require HTML or JavaScript background.
 
@@ -124,6 +124,26 @@ To run the ApiLogicProject app:
 
 </details>
 
+Things to note:
+
+1. Note the API has been created, including swagger.  Explore it in the Browser.
+
+2. You have in instant multi-page, multi-table admin app.
+
+  * Don't spend much time exploring this app - we'll see a much more useful version in just a moment.
+
+3. You can explore, and customize, the app in VSCode
+
+4. It's a great start, but there are some serious short-comings:
+
+  * **No security -** no login authentication
+
+  * **No logic -** multi-table derivations and constraints for save logic
+
+      * For example, open **Customers**, **double-click first Order**, and **delete the first Order**.  Re-click Customer from the left nav menu - it should have reduced the customer's balance from 2102, but it's unchanged.   That's because there is no logic... 
+
+Let's see how these are addressed, in the next section.
+
 </details>
 
 &nbsp;
@@ -146,14 +166,28 @@ A unique feature of API Logic Server is provision for:
 This application is a clone of the prior example, customized in VSCode:
 
 * **API:** additional endpoints are defined in ```ApiLogicProject_Logic/api/customize_api.py```
+
 * **Logic:**
+
   ** **Rules** are declared in  ```ApiLogicProject_Logic/logic/declare_logic.py```
+
   ** **Security** (multi-tenant support) is declared in ```ApiLogicProject_Logic/security/declare_security.py```
+  
 * **User Interface:** alterations are visible in ```ApiLogicProject/ui/admin/admin.yaml```
 
 You can use VSCode to *diff* these from their originals in the *ApiLogicProject*.
 
 </details>
+
+You can run the app (same procedure as Step 2, above), and observe:
+
+1. Click Category - you need to login now (user u1, password p).  That's because authentication has been activated.
+
+2. Categories has fewer rows per multi-tenant Grants in ```ApiLogicProject_Logic/security/declare_security.py```
+
+3. The app now shows help text to introduce its features 
+
+4. Our Delete Order test works, since we how have logic in ```ApiLogicProject_Logic/logic/declare_logic.py```
 
 &nbsp;
 
