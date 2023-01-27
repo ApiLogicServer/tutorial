@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file starts the API Logic Server (v 07.00.38, January 26, 2023 17:18:39):
+    This file starts the API Logic Server (v 07.00.38, January 26, 2023 19:38:38):
         $ python3 api_logic_server_run.py [--help  # host, port arguments]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -84,7 +84,7 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created January 26, 2023 17:18:39 at {str(current_path)}\n')
+app_logger.info(f'Created January 26, 2023 19:38:38 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://valhuber.github.io/ApiLogicServer/Project-Env/
