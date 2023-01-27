@@ -33,7 +33,7 @@ To __run__, use the Run/Debug configurations ("play" button, upper left).  There
 
 &nbsp;
 
-<summary>1. Basic App: hand-coded Flask / SQLAlchemy</summary>
+<summary>1. Basic App: Flask / SQLAlchemy -- flexible, but slow</summary>
 
 This illustrates a typical framework-based approach for creating projects - a minimal project for seeing core Flask and SQLAlchemy services in action.
 
@@ -52,7 +52,7 @@ Frameworks are flexible, and leverage your existing dev environment (IDE, git, e
 <details markdown>
 
 
-<summary>2. API Logic Project NoCust: Uncustomized Automation, standard customization</summary>
+<summary>2. API Logic Project Automation: instant (1 command), open</summary>
 
 &nbsp;
 
@@ -89,7 +89,7 @@ To run:
 <details markdown>
 
 
-<summary>3. Api Logic Project: Logic and Security - Unique Declarative Rules</summary>
+<summary>3. Api Logic Project: Logic and Security - Unique Spreadsheet-like Rules</summary>
 
 &nbsp;
 
