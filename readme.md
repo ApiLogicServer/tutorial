@@ -45,9 +45,7 @@ Frameworks are flexible, and leverage your existing dev environment (IDE, git, e
 
 * any security, or business logic (multi-table derivations and constraints).
 
-Execute using the Run Configuration, and test with `cURL`.
-
-&nbsp;
+Execute using the Run Configuration, and test with `cURL`.  The relvevant code is 
 
 <details markdown>
 
@@ -147,13 +145,13 @@ A unique feature of API Logic Server is provision for:
 
 This application is a clone of the prior example, customized in VSCode:
 
-* **API:** additional endpoints are defined in ```ApiLogicProject/api/customize_api.py```
+* **API:** additional endpoints are defined in ```ApiLogicProject_Logic/api/customize_api.py```
 * **Logic:**
-  ** **Rules** are declared in  ```ApiLogicProject/logic/declare_logic.py```
-  ** **Security** (multi-tenant support) is declared in ```ApiLogicProject/security/declare_security.py```
+  ** **Rules** are declared in  ```ApiLogicProject_Logic/logic/declare_logic.py```
+  ** **Security** (multi-tenant support) is declared in ```ApiLogicProject_Logic/security/declare_security.py```
 * **User Interface:** alterations are visible in ```ApiLogicProject/ui/admin/admin.yaml```
 
-You can use VSCode to *diff* these from their originals in the *ApiLogicProjectNoCustomizations*.
+You can use VSCode to *diff* these from their originals in the *ApiLogicProject*.
 
 </details>
 
@@ -192,21 +190,21 @@ Launch configurations have been pre-created, then re-execute the Admin app as ab
 &nbsp;
 
 
-| Tech Area | Skill | Basic Example | API Logic Server | Notes   |
+| Tech Area | Skill | Basic App Example | APILogicProject Logic Example | Notes   |
 |:---- |:------|:-----------|:--------|:--------|
-| __Flask__ | Setup | [```flask_basic.py```](Basic_app/flask_basic.py) |  [```api_logic_server_run.py```](ApiLogicProject/api_logic_server_run.py) |  |
-|  | Events | [```api/end_points.py```](Basic_app/api/end_points.py) |  [```ui/admin/admin_loader.py```](ApiLogicProject/ui/admin/admin_loader.py) |  |
-| __API__ | Create End Point | [```api/end_points.py```](Basic_app/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject/api/customize_api.py) |  see `def order():` |
-|  | Call endpoint |  | [```test/.../place_order.py```](ApiLogicProject/test/api_logic_server_behave/features/steps/place_order.py) | y  |
-| __Config__ | Config | [```config.py```](ApiLogicProject/config.py) | | x |
-|  | Env variables |  | [```config.py```](ApiLogicProject/config.py) | os.getenv(...)  |
-| __SQLAlchemy__ | Data Model Classes | [```database/models.py```](ApiLogicProject/database/models.py) |  | x  |
-|  | Read / Write | [```api/end_points.py```](Basic_app/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject/api/customize_api.py) | see `def order():`  |
-|  | Multiple Databases |  | [```database/bind_databases.py```](ApiLogicProject/database/bind_databases.py) |   |
-|  | Events |  | [```security/system/security_manager.py```](ApiLogicProject/security/system/security_manager.py) | x  |
-| __Logic__ | Business Rules | n/a | [```logic/declare_logic.py```](ApiLogicProject/logic/declare_logic.py) | ***Unique*** to API Logic Server  |
-| __Security__ | Multi-tenant | n/a | [```security/declare_security.py```](ApiLogicProject/security/declare_security.py) |   |
-| __Behave__ | Testing |  | [```test/.../place_order.py```](ApiLogicProject/test/api_logic_server_behave/features/steps/place_order.py) | x  |
-| __Alembic__ | Schema Changes |  | [```database/alembic/readme.md```](ApiLogicProject/database/alembic/readme.md) |   |
+| __Flask__ | Setup | [```flask_basic.py```](Basic_App/flask_basic.py) |  [```api_logic_server_run.py```](ApiLogicProject/api_logic_server_run.py) |  |
+|  | Events | [```api/end_points.py```](Basic_App/api/end_points.py) |  [```ui/admin/admin_loader.py```](ApiLogicProject_Logic/ui/admin/admin_loader.py) |  |
+| __API__ | Create End Point | [```api/end_points.py```](Basic_App/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject_Logic/api/customize_api.py) |  see `def order():` |
+|  | Call endpoint |  | [```test/.../place_order.py```](ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) | y  |
+| __Config__ | Config | [```config.py```](ApiLogicProject_Logic/config.py) | | x |
+|  | Env variables |  | [```config.py```](ApiLogicProject_Logic/config.py) | os.getenv(...)  |
+| __SQLAlchemy__ | Data Model Classes | [```database/models.py```](ApiLogicProject_Logic/database/models.py) |  | x  |
+|  | Read / Write | [```api/end_points.py```](Basic_App/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject_Logic/api/customize_api.py) | see `def order():`  |
+|  | Multiple Databases |  | [```database/bind_databases.py```](ApiLogicProject_Logic/database/bind_databases.py) |   |
+|  | Events |  | [```security/system/security_manager.py```](ApiLogicProject_Logic/security/system/security_manager.py) | x  |
+| __Logic__ | Business Rules | n/a | [```logic/declare_logic.py```](ApiLogicProject_Logic/logic/declare_logic.py) | ***Unique*** to API Logic Server  |
+| __Security__ | Multi-tenant | n/a | [```security/declare_security.py```](ApiLogicProject_Logic/security/declare_security.py) |   |
+| __Behave__ | Testing |  | [```test/.../place_order.py```](ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) | x  |
+| __Alembic__ | Schema Changes |  | [```database/alembic/readme.md```](ApiLogicProject_Logic/database/alembic/readme.md) |   |
 | __Docker__ | Dev Env | [```.devcontainer/devcontainer.json```](.devcontainer/devcontainer.json) | x | See also "dockerFile":... |
-|  | Containerize Project |  | [```devops/docker/build-container.dockerfile```](ApiLogicProject/devops/docker/build-container.dockerfile) |  |
+|  | Containerize Project |  | [```devops/docker/build-container.dockerfile```](ApiLogicProject_Logic/devops/docker/build-container.dockerfile) |  |
