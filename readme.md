@@ -45,11 +45,9 @@ Frameworks are flexible, and leverage your existing dev environment (IDE, git, e
 
 * any security, or business logic (multi-table derivations and constraints).
 
-To run:
+Execute using the Run Configuration, and test with `cURL`.
 
-1. Execute the Run Configuration: **Basic App: Flask / SQLAlchemy**
-
-2. Use cURL to exercise the endpoint, as shown in the console log
+&nbsp;
 
 <details markdown>
 
@@ -61,7 +59,7 @@ To run the basic app:
 
 1. Click Run Configurations, and the green button to start the server
 
-2. Copy the `cURL` text, and paste it into the `bash` window
+2. Copy the `cURL` text, and paste it into the `bash`/`zsh` window
 
 <figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/tutorial/1-basic-app.png?raw=true"></figure>
 
@@ -105,11 +103,9 @@ This application was created using the API Logic Server CLI (Command Language In
 ApiLogicServer create --project_name=ApiLogicProject --db_url=nw-  # use Northwind, no customizations
 ```
 
-To run:
+Execute the Run Configuration **2. API Logic Server: Instant, Open**, and **Ports > Admin App > globe**
 
-1. Execute the Run Configuration: **2. API Logic Server: Instant, Open**
-
-2. Run the admin app: **Ports > Admin App > globe**
+&nbsp;
 
 <details markdown>
 
