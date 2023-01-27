@@ -33,7 +33,7 @@ To __run__, use the Run/Debug configurations ("play" button, upper left).  There
 
 &nbsp;
 
-<summary>1. Basic Flask: hand-coded Flask / SQLAlchemy</summary>
+<summary>1. Basic App: hand-coded Flask / SQLAlchemy</summary>
 
 This illustrates a typical framework-based approach for creating projects - a minimal project for seeing core Flask and SQLAlchemy services in action.
 
@@ -52,7 +52,7 @@ Frameworks are flexible, and leverage your existing dev environment (IDE, git, e
 <details markdown>
 
 
-<summary>2. API Logic Server: Uncustomized Automation, standard customization</summary>
+<summary>2. API Logic Server NoCust: Uncustomized Automation, standard customization</summary>
 
 &nbsp;
 
