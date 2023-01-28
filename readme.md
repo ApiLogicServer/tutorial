@@ -4,26 +4,15 @@
 
 &nbsp;
 
-<summary>Approach: Learn By Example</summary>
+<summary>Welcome to this Tutorial: Flask/SQLAlchemy “In Action”</summary>
 
-Tutorials are useful ways to learn, but the __key concepts__ can be overshadowed by mechanics, and often don't include the real-world __IDE experience__.
+Use this Tutorial to learn Flask/SQLAlchemy “In Action”, using a running app in Codespaces.  Think of this as a *Application Fiddle:* explore the code, alter it, use the debugger.
 
-Here we take a different approach: a __running app__ you can explore, using the table below:
+The Key Technology Concepts (at end) is an inventory of essential skills for creating Flask/SQLAlchemy systems.  Each are illustrated here.
 
-* Explore code samples for key technology areas
-* In a _running_ project
-* That you can experiment with (debug, alter...)
+Then, discover API Logic Server - an Open Source CLI to create executable projects with a single command.  Customize projects in your IDE, including unique spreadsheet like rules for logic and security - 40X more concise than manual code.
 
-To __explore code__, click the _Sample Code_ link - that will open that code file.
-
-To __run__, use the Run/Debug configurations ("play" button, upper left).  There are 3 web apps you can run:
-
-1. __Basic Flask: hand-coded__ web app with minimal functionality
-
-2. __API Logic Server: Uncustomized *automation*__.  Using the [Northwind Database](https://valhuber.github.io/ApiLogicServer/Sample-Database/), this illustrates what you can expect for an initial project using your own database
-
-3. __API Logic Project: Logic and Security__, illustrating the use of a standard IDE to add code, and declarative logic and security
-
+You have 3 projects to explore, shown below, with key concepts and execution instructions.
 
 </details>
 
