@@ -5,21 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "1. Basic App: Flask / SQLAlchemy",
+            "name": "ApiLogicServer",
             "type": "python",
-            "env": {"APILOGICPROJECT": "False"},
+            "env": {"APILOGICPROJECT_DEBUG": "False"},
             "request": "launch",
-            "cwd": "${workspaceFolder}/1. Basic_App",
-            "program": "flask_basic.py",
-            "redirectOutput": true,
-            "justMyCode": false,
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "2. API Logic Server: Instant, Open",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}/2. ApiLogicProject",
             "program": "api_logic_server_run.py",
             "redirectOutput": true,
             "justMyCode": false,
@@ -27,45 +16,12 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "3. API Logic Project: Logic",
+            "name": "ApiLogicServer - No Security (e.g., for behave tests)",
             "type": "python",
             "request": "launch",
-            "cwd": "${workspaceFolder}/3. ApiLogicProject_Logic",
             "program": "api_logic_server_run.py",
             "redirectOutput": true,
-            "justMyCode": false,
-            "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=False"],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Execute ToDo",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}/todo",
-            "program": "api_logic_server_run.py",
-            "redirectOutput": true,
-            "justMyCode": false,
-            "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=False"],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Execute Chinook",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}/chinook",
-            "program": "api_logic_server_run.py",
-            "redirectOutput": true,
-            "justMyCode": false,
-            "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=False"],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Execute Classic Models",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}/classicmodels",
-            "program": "api_logic_server_run.py",
-            "redirectOutput": true,
+            "env": {"SECURITY_ENABLED": "False"},
             "justMyCode": false,
             "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=False"],
             "console": "integratedTerminal"
@@ -74,7 +30,7 @@
             "name": "Behave Run",
             "type": "python",
             "request": "launch",
-            "cwd": "${workspaceFolder}/ApiLogicProject/test/api_logic_server_behave",
+            "cwd": "${workspaceFolder}/test/api_logic_server_behave",
             "program": "${workspaceFolder}/test/api_logic_server_behave/behave_run.py",
             "redirectOutput": true,
             "args": [ "--outfile=${workspaceFolder}/test/api_logic_server_behave/logs/behave.log"],
@@ -82,10 +38,32 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "Windows Behave Run",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\test\\api_logic_server_behave\\features",
+            "program": "${workspaceFolder}\\test\\api_logic_server_behave\\behave_run.py",
+            "redirectOutput": true,
+            "args": [ "--outfile=${workspaceFolder}\\test\\api_logic_server_behave\\logs\\behave.log"],
+            "justMyCode": false,            
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Perform Customizations",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "program": "perform_customizations.py",
+            "redirectOutput": true,
+            "args": [ "go"],
+            "justMyCode": false,            
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Behave Scenario",
             "type": "python",
             "request": "launch",
-            "cwd": "${workspaceFolder}ApiLogicProject/test/api_logic_server_behave",
+            "cwd": "${workspaceFolder}/test/api_logic_server_behave",
             "program": "${workspaceFolder}/test/api_logic_server_behave/behave_run.py",
             "redirectOutput": true,
             "args": [ "--outfile=${workspaceFolder}/test/api_logic_server_behave/logs/behave.log",
@@ -98,13 +76,48 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}/test/api_logic_server_behave",
-            "program": "${workspaceFolder}/ApiLogicProject/test/api_logic_server_behave/behave_logic_report.py",
+            "program": "${workspaceFolder}/test/api_logic_server_behave/behave_logic_report.py",
             "redirectOutput": true,
             "justMyCode": false,            
             "args": ["run"
                 ,"--prepend_wiki=reports/Behave Logic Report Intro.md"
                 ,"--wiki=reports/Behave Logic Report.md"
             ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Codespaces-ApiLogicServer",
+            "type": "python",
+            "request": "launch",
+            "program": "api_logic_server_run.py",
+            "redirectOutput": true,
+            "justMyCode": false,
+            "args": [
+                "--flask_host=localhost", "--port=5656", "--verbose=True",
+                "--swagger_host=valhuber-tutorial-apilogicproject-jjr5qwg72vxg-5656.githubpreview.dev", 
+                "--swagger_port=443", "--http_type=https"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Basic Server Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test/basic/server_test.py",
+            "redirectOutput": true,
+            "justMyCode": false,
+            "args": ["go"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Basic Web App",
+            "type": "python",
+            "request": "launch",
+            "program": "run.py",
+            "args": ["localhost", "5002"],
+            "redirectOutput": true,
+            "justMyCode": false,            
+            "cwd": "${workspaceFolder}/ui/basic_web_app",
             "console": "integratedTerminal"
         },
         {

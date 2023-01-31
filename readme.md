@@ -4,17 +4,13 @@
 
 &nbsp;
 
-<summary>Welcome to this Tutorial: Flask/SQLAlchemy “Application Fiddle”</summary>
+<summary>Welcome to this Tutorial</summary>
 
-Use this Tutorial to learn Flask/SQLAlchemy, using running apps in Codespaces.  Think of this as an ***Application Fiddle:*** run the app, explore the code, alter it (e.g., create endpoints, issue queries), use the debugger, etc.
+Use this Tutorial for a quick tour of API Logic Server - automated project creation from a database, and customization including logic.  As a reference background, a "native" hand-code Flask app is provided for experimentation.
 
 The Key Technology Concepts (at end) is an inventory of essential skills for creating Flask/SQLAlchemy systems.  Each are illustrated here.
 
 These projects all use the [Northwind Sample Database](https://valhuber.github.io/ApiLogicServer/Sample-Database/).  Other databases are also provided in Next Steps.
-
-Start with the first application - a Basic Flask/SQLAlchemy App.
-
-Then, discover **API Logic Server** - an Open Source CLI to create executable projects, **instantly,** with a single command.  Its open source, and **open** technology: customize projects in your IDE, including unique spreadsheet like rules for logic and security - 40X more concise than manual code.
 
 </details>
 
@@ -63,14 +59,13 @@ To run the basic app:
 
 <details markdown>
 
-
 <summary>2. API Logic Project: Instant, Open</summary>
 
 &nbsp;
 
 Instead of frameworks, we might employ a Low Code approach.  Low Code tools provide excellent custom user interfaces.  However, these often require extensive screen painting, and typically require a proprietary IDE.
 
-The *API Logic Project No Customization* app provides an alternative, creating an entire project by reading your schema.  This approach is:
+The *API Logic Project* app provides an alternative, creating an entire project by reading your schema.  This approach is:
 
 * **Instant:** faster than Low Code screen painting, with instant APIs and Admin User Interfaces:
 
@@ -92,7 +87,7 @@ This application was created using the API Logic Server CLI (Command Language In
 ApiLogicServer create --project_name=ApiLogicProject --db_url=nw-  # use Northwind, no customizations
 ```
 
-Execute the Run Configuration **2. API Logic Server: Instant, Open**, and **Ports > Admin App > globe**
+To execute (see *Show me how*, below, for details): start the server with **Run and Debug >> *2.API...***, and then start the Browser at localhost:5656
 
 &nbsp;
 
@@ -104,34 +99,35 @@ Execute the Run Configuration **2. API Logic Server: Instant, Open**, and **Port
 
 To run the ApiLogicProject app:
 
-1. Click Run Configurations, select **2. API Logic Server: Instant, Open**, and click the green button to start the server
+1. Start the Server:
 
-2. Click the **Ports** tab
+    1. Click **Run and Debug**
+    2. Use the dropdown to select **2. API Logic Server: Instant, Open**, and
+    3. Click the green button to start the server
+<br><br>
 
-3. Click the **globe** to start your Browser
+2. Start the Browser at localhost:5656
+
+Don't spend too much time exploring the app, we'll see a much better version in just a moment...
 
 
 <figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/tutorial/2-apilogicproject.png?raw=true"></figure>
 
 </details>
 
-Things to note:
+&nbsp;
 
-1. Note the API has been created, including swagger.  Explore it in the Browser.
+> Key Takeway: you will achieve this level of schema-driven automation for your own databases on initial creation. 
 
-2. You have in instant multi-page, multi-table admin app.
+&nbsp;
 
-  * Don't spend much time exploring this app - we'll see a much more useful version in just a moment.
+An instant Admin App and API are a great start, but there are some serious short-comings:
 
-3. You can explore, and customize, the app in VSCode
+* **No security -** no login authentication
 
-4. It's a great start, but there are some serious short-comings:
+* **No logic -** multi-table derivations and constraints for save logic
 
-  * **No security -** no login authentication
-
-  * **No logic -** multi-table derivations and constraints for save logic
-
-      * For example, open **Customers**, **double-click first Order**, and **delete the first Order**.  Re-click Customer from the left nav menu - it should have reduced the customer's balance from 2102, but it's unchanged.   That's because there is no logic... 
+    * For example, open **Customers**, **double-click first Order**, and **delete the first Order**.  Re-click Customer from the left nav menu - it should have reduced the customer's balance from 2102, but it's unchanged.   That's because there is *no logic...*
 
 Let's see how these are addressed, in the next section.
 
@@ -150,36 +146,36 @@ A running API and UI are a great start, but completing the project still require
 
 A unique feature of API Logic Server is provision for:
 
-* **Business Logic Automation:** using unique spreadsheet-like rules, extensible with Python 🏆
+* **Business Logic Automation:** using unique spreadsheet-like rules for multi-table derivations and constraints, extensible with Python
 
-* These are declared in your IDE, with full support for code completion, logging, and debugging
+* These are **declared in *your IDE,*** with full support for code completion, logging, and debugging
 
 This application is a clone of the prior example, customized in VSCode:
 
 * **API:** additional endpoints are defined in ```ApiLogicProject_Logic/api/customize_api.py```
 
-* **Logic:**
+* **Logic:** the project now implements logic and security
 
-  * **Rules** are declared in  ```ApiLogicProject_Logic/logic/declare_logic.py```
+* **User Interface:** the app now has help text that walks you through the key features
 
-  * **Security** (multi-tenant support) is declared in ```ApiLogicProject_Logic/security/declare_security.py```
+You can run the app.  First, stop the server using the red "stop" button).  Then, restart with the same procedure as Step 2, above, but choose Run Configuration ***3. API Logic Project: Logic***.  Observe the customizations:
 
-* **User Interface:** alterations are visible in ```ApiLogicProject/ui/admin/admin.yaml```
+1. Click Category - you need to **login** now (user u1, password p).  That's because authentication has been activated.
+
+2. Categories has fewer rows per **multi-tenant Grant logic** in ```ApiLogicProject_Logic/security/declare_security.py```
+
+3. The app now shows **help text** to introduce its features per updates in ```ApiLogicProject/ui/admin/admin.yaml```
+
+4. Our Delete Order test adjusts the customer balance, since we how have **business logic** in ```ApiLogicProject_Logic/logic/declare_logic.py```
 
 You can use VSCode to *diff* these from their originals in the *ApiLogicProject*.
 
-
-You can run the app (same procedure as Step 2, above), and observe:
-
-1. Click Category - you need to login now (user u1, password p).  That's because authentication has been activated.
-
-2. Categories has fewer rows per multi-tenant Grants in ```ApiLogicProject_Logic/security/declare_security.py```
-
-3. The app now shows help text to introduce its features 
-
-4. Our Delete Order test works, since we how have logic in ```ApiLogicProject_Logic/logic/declare_logic.py```
-
 Use the [```Detailed Tutorial```](ApiLogicProject/readme.md) to further explore this app.
+
+&nbsp;
+
+> **Key Take-aways** <br>1. **Instant** project creation<br>2. Spreadsheet-like **Rules**<br>3. Fully Customizable in **your IDE**.
+
 
 </details>
 &nbsp;
@@ -197,13 +193,14 @@ As shown above, it's easy to create projects with a single command.  To help you
 cd tutorial
 ApiLogicServer create --project_name=todo --db_url=todo
 ```
+Then, run the server as above, using the Run Configuration for `Execute ToDo`.
+
 You can also try these other examples (be sure to `cd tutorial`; use the name below for both the _project_name_ and the _db_url_):
 
 * **chinook** - albums and artists
 * **classicmodels** - customers and orders
 
 Launch configurations have been pre-created, then re-execute the Admin app as above.
-
 
 > Next, try it on your own databases: if you have a database, you can have an API and an Admin app in minutes.
 
@@ -223,18 +220,18 @@ Launch configurations have been pre-created, then re-execute the Admin app as ab
 | Tech Area | Skill | Basic App Example | APILogicProject Logic Example | Notes   |
 |:---- |:------|:-----------|:--------|:--------|
 | __Flask__ | Setup | [```flask_basic.py```](Basic_App/flask_basic.py) |  [```api_logic_server_run.py```](ApiLogicProject/api_logic_server_run.py) |  |
-|  | Events | [```api/end_points.py```](Basic_App/api/end_points.py) |  [```ui/admin/admin_loader.py```](ApiLogicProject_Logic/ui/admin/admin_loader.py) |  |
+|  | Events | |  [```ui/admin/admin_loader.py```](ApiLogicProject_Logic/ui/admin/admin_loader.py) |  |
 | __API__ | Create End Point | [```api/end_points.py```](Basic_App/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject_Logic/api/customize_api.py) |  see `def order():` |
-|  | Call endpoint |  | [```test/.../place_order.py```](ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) | y  |
-| __Config__ | Config | [```config.py```](ApiLogicProject_Logic/config.py) | | x |
+|  | Call endpoint |  | [```test/.../place_order.py```](ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) | |
+| __Config__ | Config | [```config.py```](ApiLogicProject_Logic/config.py) | | |
 |  | Env variables |  | [```config.py```](ApiLogicProject_Logic/config.py) | os.getenv(...)  |
-| __SQLAlchemy__ | Data Model Classes | [```database/models.py```](ApiLogicProject_Logic/database/models.py) |  | x  |
+| __SQLAlchemy__ | Data Model Classes | [```database/models.py```](ApiLogicProject_Logic/database/models.py) |  |  |
 |  | Read / Write | [```api/end_points.py```](Basic_App/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject_Logic/api/customize_api.py) | see `def order():`  |
 |  | Multiple Databases |  | [```database/bind_databases.py```](ApiLogicProject_Logic/database/bind_databases.py) |   |
-|  | Events |  | [```security/system/security_manager.py```](ApiLogicProject_Logic/security/system/security_manager.py) | x  |
+|  | Events |  | [```security/system/security_manager.py```](ApiLogicProject_Logic/security/system/security_manager.py) |  |
 | __Logic__ | Business Rules | n/a | [```logic/declare_logic.py```](ApiLogicProject_Logic/logic/declare_logic.py) | ***Unique*** to API Logic Server  |
 | __Security__ | Multi-tenant | n/a | [```security/declare_security.py```](ApiLogicProject_Logic/security/declare_security.py) |   |
-| __Behave__ | Testing |  | [```test/.../place_order.py```](ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) | x  |
+| __Behave__ | Testing |  | [```test/.../place_order.py```](ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) |  |
 | __Alembic__ | Schema Changes |  | [```database/alembic/readme.md```](ApiLogicProject_Logic/database/alembic/readme.md) |   |
-| __Docker__ | Dev Env | [```.devcontainer/devcontainer.json```](.devcontainer/devcontainer.json) | x | See also "dockerFile":... |
+| __Docker__ | Dev Env | | [```.devcontainer/devcontainer.json```](.devcontainer/devcontainer.json) | See also "For_VS_Code.dockerFile" |
 |  | Containerize Project |  | [```devops/docker/build-container.dockerfile```](ApiLogicProject_Logic/devops/docker/build-container.dockerfile) |  |
