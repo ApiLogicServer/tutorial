@@ -46,7 +46,7 @@ To run the basic app:
 
 2. Copy the `cURL` text, and paste it into the `bash`/`zsh` window
 
-<figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/tutorial/1-basic-app.png?raw=true"></figure>
+<figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/tutorial/1-basic-app-tutorial.png?raw=true"></figure>
 
 </details>
 
@@ -111,7 +111,7 @@ To run the ApiLogicProject app:
 Don't spend too much time exploring the app, we'll see a much better version in just a moment...
 
 
-<figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/tutorial/2-apilogicproject.png?raw=true"></figure>
+<figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/tutorial/2-apilogicproject-tutorial.png?raw=true"></figure>
 
 </details>
 
