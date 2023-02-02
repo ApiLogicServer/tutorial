@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file starts the API Logic Server (v 07.00.44, January 30, 2023 19:57:53):
+    This file starts the API Logic Server (v 07.00.49, February 01, 2023 20:45:26):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -84,7 +84,7 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created January 30, 2023 19:57:53 at {str(current_path)}\n')
+app_logger.info(f'Created February 01, 2023 20:45:26 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://valhuber.github.io/ApiLogicServer/Project-Env/
@@ -374,7 +374,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, ValidationError=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 07.00.44\n'
+    msg = f'API Logic Project loaded (not WSGI), version 07.00.49\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -394,7 +394,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 07.00.44\n'
+    msg = f'API Logic Project Loaded (WSGI), version 07.00.49\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:
