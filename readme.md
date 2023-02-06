@@ -10,7 +10,7 @@ Use this Tutorial for a quick tour of API Logic Server - automated project creat
 
 The Key Technology Concepts (at end) is an inventory of essential skills for creating Flask/SQLAlchemy systems.  Each are illustrated here.
 
-These projects all use the [Northwind Sample Database](https://valhuber.github.io/ApiLogicServer/Sample-Database/).  Other databases are also provided in Next Steps.
+These projects all use the [Northwind Sample Database](https://apilogicserver.github.io/Docs/Sample-Database/).  Other databases are also provided in Next Steps.
 
 </details>
 
@@ -87,7 +87,7 @@ This application was created using the API Logic Server CLI (Command Language In
 ApiLogicServer create --project_name=ApiLogicProject --db_url=nw-  # use Northwind, no customizations
 ```
 
-To execute (see *Show me how*, below, for details): start the server with **Run and Debug >> *2.API...***, and then start the Browser at localhost:5656
+To execute (see *Show me how*, below, for details): start the server with **Run and Debug >> *2.API...***, and then start the Browser at localhost:5656 **(url in the console log)**
 
 &nbsp;
 
@@ -106,12 +106,11 @@ To run the ApiLogicProject app:
     3. Click the green button to start the server
 <br><br>
 
-2. Start the Browser at localhost:5656
+2. Start the Browser at localhost:5656, using the **url shown in the console log**
 
 Don't spend too much time exploring the app, we'll see a much better version in just a moment...
 
-
-<figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/tutorial/2-apilogicproject-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial.png?raw=true"></figure>
 
 </details>
 
@@ -219,19 +218,19 @@ Launch configurations have been pre-created, then re-execute the Admin app as ab
 
 | Tech Area | Skill | Basic App Example | APILogicProject Logic Example | Notes   |
 |:---- |:------|:-----------|:--------|:--------|
-| __Flask__ | Setup | [```flask_basic.py```](Basic_App/flask_basic.py) |  [```api_logic_server_run.py```](ApiLogicProject/api_logic_server_run.py) |  |
-|  | Events | |  [```ui/admin/admin_loader.py```](ApiLogicProject_Logic/ui/admin/admin_loader.py) |  |
-| __API__ | Create End Point | [```api/end_points.py```](Basic_App/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject_Logic/api/customize_api.py) |  see `def order():` |
-|  | Call endpoint |  | [```test/.../place_order.py```](ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) | |
-| __Config__ | Config | [```config.py```](ApiLogicProject_Logic/config.py) | | |
-|  | Env variables |  | [```config.py```](ApiLogicProject_Logic/config.py) | os.getenv(...)  |
-| __SQLAlchemy__ | Data Model Classes | [```database/models.py```](ApiLogicProject_Logic/database/models.py) |  |  |
-|  | Read / Write | [```api/end_points.py```](Basic_App/api/end_points.py) | [```api/customize_api.py```](ApiLogicProject_Logic/api/customize_api.py) | see `def order():`  |
-|  | Multiple Databases |  | [```database/bind_databases.py```](ApiLogicProject_Logic/database/bind_databases.py) |   |
-|  | Events |  | [```security/system/security_manager.py```](ApiLogicProject_Logic/security/system/security_manager.py) |  |
-| __Logic__ | Business Rules | n/a | [```logic/declare_logic.py```](ApiLogicProject_Logic/logic/declare_logic.py) | ***Unique*** to API Logic Server  |
-| __Security__ | Multi-tenant | n/a | [```security/declare_security.py```](ApiLogicProject_Logic/security/declare_security.py) |   |
-| __Behave__ | Testing |  | [```test/.../place_order.py```](ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) |  |
-| __Alembic__ | Schema Changes |  | [```database/alembic/readme.md```](ApiLogicProject_Logic/database/alembic/readme.md) |   |
+| __Flask__ | Setup | [```flask_basic.py```](1.%20Basic_App/flask_basic.py) |  [```api_logic_server_run.py```](3. ApiLogicProject_Logic/api_logic_server_run.py) |  |
+|  | Events | |  [```ui/admin/admin_loader.py```](3.%20ApiLogicProject_Logic/ui/admin/admin_loader.py) |  |
+| __API__ | Create End Point | [```api/end_points.py```](Basic_App/api/end_points.py) | [```api/customize_api.py```](3.%20ApiLogicProject_Logic/api/customize_api.py) |  see `def order():` |
+|  | Call endpoint |  | [```test/.../place_order.py```](3.%20ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) | |
+| __Config__ | Config | [```config.py```](3.%20ApiLogicProject_Logic/config.py) | | |
+|  | Env variables |  | [```config.py```](3.%20ApiLogicProject_Logic/config.py) | os.getenv(...)  |
+| __SQLAlchemy__ | Data Model Classes | [```database/models.py```](3.%20ApiLogicProject_Logic/database/models.py) |  |  |
+|  | Read / Write | [```api/end_points.py```](3.%20Basic_App/api/end_points.py) | [```api/customize_api.py```](3.%20ApiLogicProject_Logic/api/customize_api.py) | see `def order():`  |
+|  | Multiple Databases |  | [```database/bind_databases.py```](3.%20ApiLogicProject_Logic/database/bind_databases.py) |   |
+|  | Events |  | [```security/system/security_manager.py```](3.%20ApiLogicProject_Logic/security/system/security_manager.py) |  |
+| __Logic__ | Business Rules | n/a | [```logic/declare_logic.py```](3.%20ApiLogicProject_Logic/logic/declare_logic.py) | ***Unique*** to API Logic Server  |
+| __Security__ | Multi-tenant | n/a | [```security/declare_security.py```](3.%20ApiLogicProject_Logic/security/declare_security.py) |   |
+| __Behave__ | Testing |  | [```test/.../place_order.py```](3.%20ApiLogicProject_Logic/test/api_logic_server_behave/features/steps/place_order.py) |  |
+| __Alembic__ | Schema Changes |  | [```database/alembic/readme.md```](3.%20ApiLogicProject_Logic/database/alembic/readme.md) |   |
 | __Docker__ | Dev Env | | [```.devcontainer/devcontainer.json```](.devcontainer/devcontainer.json) | See also "For_VS_Code.dockerFile" |
-|  | Containerize Project |  | [```devops/docker/build-container.dockerfile```](ApiLogicProject_Logic/devops/docker/build-container.dockerfile) |  |
+|  | Containerize Project |  | [```devops/docker/build-container.dockerfile```](3.%20ApiLogicProject_Logic/devops/docker/build-container.dockerfile) |  |

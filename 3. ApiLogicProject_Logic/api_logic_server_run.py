@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file starts the API Logic Server (v 07.00.49, February 01, 2023 20:45:26):
+    This file starts the API Logic Server (v 07.00.53, February 05, 2023 19:26:28):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -84,10 +84,10 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created February 01, 2023 20:45:26 at {str(current_path)}\n')
+app_logger.info(f'Created February 05, 2023 19:26:28 at {str(current_path)}\n')
 
 from typing import TypedDict
-import safrs  # fails without venv - see https://valhuber.github.io/ApiLogicServer/Project-Env/
+import safrs  # fails without venv - see https://apilogicserver.github.io/Docs/Project-Env/
 from logic_bank.logic_bank import LogicBank
 from logic_bank.exec_row_logic.logic_row import LogicRow
 from sqlalchemy.ext.declarative import declarative_base
@@ -326,8 +326,65 @@ def create_app(swagger_host: str = None, swagger_port: int = None):
             app_logger.info(f'\nDeclare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}')
 
             custom_swagger = {
-                "securityDefinitions": {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}},
-                "security": [{"Bearer": []}],
+            "securityDefinitions": {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}},
+            "security": [{"Bearer": []}],
+            "paths": {
+                "/auth/login": {
+                "post": {
+                    "tags": [
+                    "auth"
+                    ],
+                    "summary": "Authenticate User",
+                    "description": "Creates an access token",
+                    "operationId": "AuthLogin",
+                    "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Authentication Failed"
+                    }
+                    },
+                    "parameters": [
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "type": "string",
+                        "default": "application/vnd.api+json",
+                        "enum": [
+                        "application/vnd.api+json",
+                        "application/json"
+                        ],
+                        "required": True
+                    },
+                    {
+                        "name": "POST body",
+                        "in": "body",
+                        "description": "Category attributes",
+                        "schema": {
+                        "$ref": "#/definitions/auth_login"
+                        },
+                        "required": True
+                    }
+                    ]
+                }
+                }
+            },
+            "definitions": {
+                "auth_login": {
+                    "properties": {
+                        "username": {
+                        "example": "u1",
+                        "type": "string"
+                        },
+                        "password": {
+                        "example": "p",
+                        "type": "string"
+                        }
+                    },
+                    "description": "authentication payload"
+                    }
+                }
             }
             safrs_api = SAFRSAPI(flask_app, host=swagger_host, port=swagger_port, prefix = API_PREFIX, custom_swagger=custom_swagger)
             
@@ -374,7 +431,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, ValidationError=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 07.00.49\n'
+    msg = f'API Logic Project loaded (not WSGI), version 07.00.53\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -394,7 +451,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 07.00.49\n'
+    msg = f'API Logic Project Loaded (WSGI), version 07.00.53\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:

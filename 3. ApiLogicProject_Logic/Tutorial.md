@@ -2,7 +2,7 @@
 
 This Tutorial is designed for these scenarios:
 
-* You have executed the `ApiLogicServer create` step, have opened the created [default project](https://valhuber.github.io/ApiLogicServer/Sample-Database/) in your IDE, and want to explore a typical project
+* You have executed the `ApiLogicServer create` step, have opened the created [default project](https://apilogicserver.github.io/Docs/Sample-Database/) in your IDE, and want to explore a typical project
 
    * Projects are pre-configured for VS Code with `.devcontainer` and `launch configurations,` so these instructions are oriented around VS Code.
 
@@ -51,7 +51,7 @@ The diagram above summarizes the create / run / customize process.  When you iss
 After creation, you must establish your Python environment:
 
 * This is already complete for Codespace users
-* Other users - please  see [Quick Start > Express Install](https://valhuber.github.io/ApiLogicServer/IDE-Execute/), which explains how to:
+* Other users - please  see [Quick Start > Express Install](https://apilogicserver.github.io/Docs/IDE-Execute/), which explains how to:
 
    1. Install API Logic Server
    2. Create the sample Tutorial API Logic Server Project
@@ -182,9 +182,9 @@ API and UI automation are impressive answers to _familiar_ challenges.  Logic au
  
 The *logic* portion of API *Logic* server is a declarative approach - you declare spreadsheet-like rules for multi-table constraints and derivations.  The 5 rules shown below represent the same logic as 200 lines of Python - a remarkable **40X.**
 
-> :bulb: Since they automate all the re-use and dependency management, rules are [40X more concise](https://github.com/valhuber/LogicBank/wiki/by-code) than code.  Like a spreadsheet, rules __watch__ for changes, __react__ by automatically executing relevant rules, which can __chain__ to activate other rules; you can [visualize the process here](https://valhuber.github.io/ApiLogicServer/Logic-Operation/#watch-react-chain).
+> :bulb: Since they automate all the re-use and dependency management, rules are [40X more concise](https://github.com/valhuber/LogicBank/wiki/by-code) than code.  Like a spreadsheet, rules __watch__ for changes, __react__ by automatically executing relevant rules, which can __chain__ to activate other rules; you can [visualize the process here](https://apilogicserver.github.io/Docs/Logic-Operation/#watch-react-chain).
 
-[Logic](https://valhuber.github.io/ApiLogicServer/Logic-Why/) consists of rules **and** conventional Python code.  Explore it like this:
+[Logic](https://apilogicserver.github.io/Docs/Logic-Why/) consists of rules **and** conventional Python code.  Explore it like this:
 
 1. Open **Explorer > logic/declare_logic.py**:
    * Observe the 5 rules highlighted in the diagram below.  These are built with code completion.
@@ -195,7 +195,7 @@ The *logic* portion of API *Logic* server is a declarative approach - you declar
 
 <figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/tutorial/debug-logic.png?raw=true"></figure>
 
-Internally, rules execute by listening to SQLAlchemy `before_flush` events, as [described here](https://valhuber.github.io/ApiLogicServer/Logic-Operation/#how-usage-and-operation-overview).
+Internally, rules execute by listening to SQLAlchemy `before_flush` events, as [described here](https://apilogicserver.github.io/Docs/Logic-Operation/#how-usage-and-operation-overview).
 
 > This rule architecture ensures that rules are always re-used across all client applications and integrations.  This avoids common "fat client" approaches that embed logic in user interface controllers, which leads to replication and inconsistency.
 
@@ -205,7 +205,7 @@ Internally, rules execute by listening to SQLAlchemy `before_flush` events, as [
 
 ## Test
 
-You can test using standard api and ui test tools.  We recommend exploring the [Behave framework](https://valhuber.github.io/ApiLogicServer/Behave/).  This can be used as part of an overall agile approach as described in the [Logic Tutorial](https://valhuber.github.io/ApiLogicServer/Logic-Tutorial/).
+You can test using standard api and ui test tools.  We recommend exploring the [Behave framework](https://apilogicserver.github.io/Docs/Behave/).  This can be used as part of an overall agile approach as described in the [Logic Tutorial](https://apilogicserver.github.io/Docs/Logic-Tutorial/).
 
 TL;DR - features and test scripts are predefined in the sample; to run them (with the server running):
 
@@ -217,7 +217,7 @@ TL;DR - features and test scripts are predefined in the sample; to run them (wit
 
    > The sample Scenarios below were chosen to illustrate the basic patterns of using rules. Open the disclosure box ("Tests - and their logic...") to see the implementation and notes.   
 
-For more information, see [Testing with Behave](https://valhuber.github.io/ApiLogicServer/Behave/).
+For more information, see [Testing with Behave](https://apilogicserver.github.io/Docs/Behave/).
 
 &nbsp;&nbsp;
 
@@ -236,8 +236,8 @@ Let's recap what you've seen:
 
 After the Tutorial, these are excellent next steps:
 
-* Try other databases - here are [some installed samples](https://valhuber.github.io/ApiLogicServer/Data-Model-Examples/), and try your own
-* Explore the [Logic Tutorial](https://valhuber.github.io/ApiLogicServer/Logic-Tutorial/).
+* Try other databases - here are [some installed samples](https://apilogicserver.github.io/Docs/Data-Model-Examples/), and try your own
+* Explore the [Logic Tutorial](https://apilogicserver.github.io/Docs/Logic-Tutorial/).
 
 
 ### Docker cleanup

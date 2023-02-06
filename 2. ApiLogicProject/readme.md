@@ -23,11 +23,11 @@ This project was created by API Logic Server.  Edit / extend this readme as desi
 
 ### Establish your Python environment
 Install your projects' virtual environment
-as described in [Virtual Environment](https://valhuber.github.io/ApiLogicServer/Project-Env/). See also the `venv_setup` directory in your API Logic Project.
+as described in [Virtual Environment](https://apilogicserver.github.io/Docs/Project-Env/). See also the `venv_setup` directory in your API Logic Project.
 
 ### For SqlServer, install `pyodbc`
 Not required for docker-based projects (it's pre-installed). 
-For local installs, see the [Install pyodbc](https://valhuber.github.io/ApiLogicServer/Install-pyodbc/).
+For local installs, see the [Install pyodbc](https://apilogicserver.github.io/Docs/Install-pyodbc/).
 
 ### Run
 Then, start the API, either by IDE launch configurations, or by command line:
@@ -44,8 +44,8 @@ python api_logic_server_run.py
 
 | About                    | Info                               |
 |:-------------------------|:-----------------------------------|
-| Created                  | February 01, 2023 20:45:26                      |
-| API Logic Server Version | 07.00.49           |
+| Created                  | February 05, 2023 19:26:28                      |
+| API Logic Server Version | 07.00.53           |
 | Created in directory     | /Users/val/dev/Org-ApiLogicServer/tutorial/2. ApiLogicProject |
 | API Name                 | api          |
 
@@ -78,7 +78,7 @@ swagger/OpenAPI and JSON:API compliant API implementation.
 
 ### LogicBank
 
-[Transaction Logic for SQLAlchemy Object Models](https://valhuber.github.io/ApiLogicServer/Logic/)
+[Transaction Logic for SQLAlchemy Object Models](https://apilogicserver.github.io/Docs/Logic/)
 
 Use Logic Bank to govern SQLAlchemy update transaction logic - 
 multi-table derivations, constraints, and actions such as sending mail or messages. Logic consists of _both:_

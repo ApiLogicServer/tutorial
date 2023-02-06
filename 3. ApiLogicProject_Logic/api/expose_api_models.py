@@ -19,7 +19,7 @@ def expose_models(api, method_decorators = []):  # th
             Including get (filtering, pagination, related data access) 
             And post/patch/update (including logic enforcement) 
         You typically do not customize this file 
-            See https://valhuber.github.io/ApiLogicServer/Tutorial/#customize-and-debug 
+            See https://apilogicserver.github.io/Docs/Tutorial/#customize-and-debug 
     """
     api.expose_object(database.models.Category, method_decorators= method_decorators)
     api.expose_object(database.models.Customer, method_decorators= method_decorators)
