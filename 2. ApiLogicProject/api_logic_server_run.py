@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file starts the API Logic Server (v 07.00.56, February 07, 2023 19:59:38):
+    This file starts the API Logic Server (v 07.00.58, February 09, 2023 07:09:36):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -84,7 +84,7 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created February 07, 2023 19:59:38 at {str(current_path)}\n')
+app_logger.info(f'Created February 09, 2023 07:09:36 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://apilogicserver.github.io/Docs/Project-Env/
@@ -391,11 +391,11 @@ def create_app(swagger_host: str = None, swagger_port: int = None):
             app_logger.info(f'Customize API - api/expose_service.py, exposing custom services')
             customize_api.expose_services(flask_app, safrs_api, project_dir, swagger_host=swagger_host, PORT=port)  # custom services
 
-            method_decorators=[]  # th login code (move to separate file??)
+            method_decorators=[]
             if Config.SECURITY_ENABLED:
                 configure_auth(flask_app, database, method_decorators)
             
-            expose_api_models.expose_models(safrs_api, method_decorators)  # th new
+            expose_api_models.expose_models(safrs_api, method_decorators)
 
             from database.bind_databases import open_databases
             open_databases(flask_app, session, safrs_api, method_decorators)
@@ -431,7 +431,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, ValidationError=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 07.00.56\n'
+    msg = f'API Logic Project loaded (not WSGI), version 07.00.58\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -451,7 +451,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 07.00.56\n'
+    msg = f'API Logic Project Loaded (WSGI), version 07.00.58\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:
