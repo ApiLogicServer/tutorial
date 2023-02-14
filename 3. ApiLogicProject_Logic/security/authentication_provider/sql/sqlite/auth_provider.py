@@ -10,8 +10,8 @@ from sqlalchemy import inspect
 # sql auth provider
 # **********************
 
-db = safrs.DB         # Use the safrs.DB, not db!
-session = db.session  # sqlalchemy.orm.scoping.scoped_session
+db = None  # VH
+session = None
 
 class Authentication_Provider(Abstract_Authentication_Provider):
 
@@ -34,6 +34,11 @@ class Authentication_Provider(Abstract_Authentication_Provider):
             for each_column in mapper.columns:
                 rtn_dotmap[each_column.name] = getattr(row, each_column.name)
             return rtn_dotmap
+
+        global db, session  # VH
+        if db is None:
+            db = safrs.DB         # Use the safrs.DB for database access
+            session = db.session  # sqlalchemy.orm.scoping.scoped_session
 
         user = session.query(authentication_models.User).filter(authentication_models.User.id == id).one()
         use_db_row = True

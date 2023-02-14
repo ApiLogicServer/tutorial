@@ -8,6 +8,7 @@ import safrs
 import sqlalchemy
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import object_mapper
+from logic_bank.rule_bank.rule_bank import RuleBank
 
 app_logger = logging.getLogger("api_logic_server_app")
 
@@ -31,7 +32,7 @@ def dbpath(dbname: str) -> str:
     return PATH
 
 
-def json_to_entities(from_row: object, to_row: safrs.DB.Model):
+def json_to_entities(from_row: object, to_row):
     """
     transform json object to SQLAlchemy rows, for save & logic
 
@@ -177,7 +178,7 @@ def server_log(request, jsonify):
     return jsonify({"result": f'ok'})
 
 
-def row_to_dict(row: safrs.DB.Model
+def row_to_dict(row
                 , replace_attribute_tag: str = None
                 , remove_links_relationships: bool = False) -> dict:
     """
@@ -199,3 +200,25 @@ def row_to_dict(row: safrs.DB.Model
         row_as_dict.pop('links')
         row_as_dict.pop('relationships')
     return row_as_dict
+
+
+def rows_to_dict(result: object) -> list:
+    """
+    Converts SQLAlchemy result to dict array
+
+    Args:
+        result (object): SQLAlchemy result
+
+    Returns:
+        dict: dict array
+    """
+    rows = []
+    for each_row in result:
+        row_as_dict = None
+        print(f'type(each_row): {type(each_row)}')
+        if isinstance (each_row, sqlalchemy.engine.row.LegacyRow):  # sqlalchemy.engine.row
+            row_as_dict = each_row._asdict()
+        else:
+            row_as_dict = each_row.to_dict()
+        rows.append(row_as_dict)
+    return rows

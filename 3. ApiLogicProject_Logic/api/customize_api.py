@@ -86,7 +86,7 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
     @admin_required()
     def cats():
         """
-        Explore SQLAlchemy and/or 
+        Explore SQLAlchemy and/or filters.
         
         Test (returns rows 2-5):
             curl -X GET "http://localhost:5656/cats [no-filter | simple-filter]"
@@ -161,13 +161,14 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
     
     app_logger.info("..api/expose_service.py, exposing custom services: hello_world, add_order")
     api.expose_object(ServicesEndPoint)
+    api.expose_object(CategoriesEndPoint)
 
 
 class ServicesEndPoint(safrs.JABase):
     """
     Illustrate custom service - visible in swagger
     
-    Quite small, since transaction logic comes from shared rules
+    Quite small, since transaction logic comes from shared logic
     """
 
     @classmethod
@@ -196,3 +197,33 @@ class ServicesEndPoint(safrs.JABase):
 
         util.json_to_entities(kwargs, new_order)  # generic function - any db object
         return {}  # automatic commit, which executes transaction logic
+
+
+class CategoriesEndPoint(safrs.JABase):
+    """
+    Illustrates swagger-visible RPC that requires authentication (@jwt_required()).
+
+    Observe authorization is thus enforced.  Test in swagger --
+    * Post to endpoint auth to obtain <access_token> value - copy it to clipboard
+    * Authorize (top of swagger), using Bearer <access_token>
+    * Post to CategoriesEndPoint/getcats, observe only rows 2-5 returned
+
+    """
+
+    @staticmethod
+    @jwt_required()
+    @jsonapi_rpc(http_methods=['POST'], valid_jsonapi=False)
+    def get_cats():
+        db = safrs.DB
+        session = db.session
+        # Security.set_user_sa()  # use to bypass authorization (also requires @admin_required)
+
+        result = session.query(models.Category)
+        for each_row in result:
+            print(f'each_row: {each_row}')
+        dont_rely_on_safrs_debug = True
+        # response = {"result" : list(result)}
+        if dont_rely_on_safrs_debug:
+            rows = util.rows_to_dict(result)
+            response = {"result": rows}
+        return response

@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file starts the API Logic Server (v 07.00.58, February 09, 2023 07:09:36):
+    This file starts the API Logic Server (v 07.00.76, February 14, 2023 08:43:07):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -19,7 +19,9 @@
 """
 
 import os, logging, logging.config, sys, yaml
-
+from flask_sqlalchemy import SQLAlchemy
+import json
+from pathlib import Path
 
 def is_docker() -> bool:
     """ running docker?  dir exists: /home/api_logic_server """
@@ -84,7 +86,7 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created February 09, 2023 07:09:36 at {str(current_path)}\n')
+app_logger.info(f'Created February 14, 2023 08:43:07 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://apilogicserver.github.io/Docs/Project-Env/
@@ -101,7 +103,7 @@ from ui.admin.admin_loader import admin_events
 from security.system.authentication import configure_auth
 
 def setup_logging(flask_app):
-    setup_logic_logger = True
+    setup_logic_logger = False
     if setup_logic_logger:
         logic_logger = logging.getLogger('logic_logger')  # for debugging user logic
         handler = logging.StreamHandler(sys.stderr)
@@ -132,7 +134,7 @@ def setup_logging(flask_app):
         engine_logger.addHandler(handler)
         engine_logger.setLevel(logging.DEBUG)
 
-    do_safrs_logging = True
+    do_safrs_logging = False
     if do_safrs_logging:
         safrs_init_logger = logging.getLogger('safrs.safrs_init')
         safrs_init_logger.setLevel(logging.DEBUG)
@@ -307,13 +309,7 @@ def create_app(swagger_host: str = None, swagger_port: int = None):
         if admin_enabled:
             flask_app.config.update(SQLALCHEMY_BINDS={'admin': 'sqlite:////tmp/4LSBE.sqlite.4'})
 
-        db = safrs.DB
-        session: Session = db.session
-        import database.models
-        from logic import declare_logic
-        LogicBank.activate(session=session, activator=declare_logic.declare_logic, constraint_event=constraint_handler)
-        app_logger.info("Declare   Logic complete - logic/declare_logic.py (rules + code)"
-            + f' -- {len(database.models.metadata.tables)} tables loaded')  # db opened 1st access
+        db = SQLAlchemy()
 
         db.init_app(flask_app)
         with flask_app.app_context():
@@ -322,71 +318,24 @@ def create_app(swagger_host: str = None, swagger_port: int = None):
                 db.create_all(bind='admin')
                 session.commit()
 
-            from api import expose_api_models, customize_api
-            app_logger.info(f'\nDeclare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}')
+            # VH moved from api import expose_api_models, customize_api
+            # app_logger.info(f'\nDeclare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}')
 
-            custom_swagger = {
-            "securityDefinitions": {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}},
-            "security": [{"Bearer": []}],
-            "paths": {
-                "/auth/login": {
-                "post": {
-                    "tags": [
-                    "auth"
-                    ],
-                    "summary": "Authenticate User",
-                    "description": "Creates an access token",
-                    "operationId": "AuthLogin",
-                    "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    },
-                    "401": {
-                        "description": "Authentication Failed"
-                    }
-                    },
-                    "parameters": [
-                    {
-                        "name": "Content-Type",
-                        "in": "header",
-                        "type": "string",
-                        "default": "application/vnd.api+json",
-                        "enum": [
-                        "application/vnd.api+json",
-                        "application/json"
-                        ],
-                        "required": True
-                    },
-                    {
-                        "name": "POST body",
-                        "in": "body",
-                        "description": "Category attributes",
-                        "schema": {
-                        "$ref": "#/definitions/auth_login"
-                        },
-                        "required": True
-                    }
-                    ]
-                }
-                }
-            },
-            "definitions": {
-                "auth_login": {
-                    "properties": {
-                        "username": {
-                        "example": "u1",
-                        "type": "string"
-                        },
-                        "password": {
-                        "example": "p",
-                        "type": "string"
-                        }
-                    },
-                    "description": "authentication payload"
-                    }
-                }
-            }
-            safrs_api = SAFRSAPI(flask_app, host=swagger_host, port=swagger_port, prefix = API_PREFIX, custom_swagger=custom_swagger)
+            with open(Path(current_path).joinpath('security/system/custom_swagger.json')) as json_file:
+                custom_swagger = json.load(json_file)
+            safrs_api = SAFRSAPI(flask_app, app_db= db, host=swagger_host, port=swagger_port, prefix = API_PREFIX, custom_swagger=custom_swagger)
+
+            db = safrs.DB  # valid only after is initialized, above
+            session: Session = db.session
+
+            from api import expose_api_models, customize_api
+            app_logger.info(f'\nDeclare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}\n')
+
+            import database.models
+            from logic import declare_logic
+            LogicBank.activate(session=session, activator=declare_logic.declare_logic, constraint_event=constraint_handler)
+            app_logger.info("Declare   Logic complete - logic/declare_logic.py (rules + code)"
+                + f' -- {len(database.models.metadata.tables)} tables loaded\n')  # db opened 1st access
             
             app_logger.info(f'Customize API - api/expose_service.py, exposing custom services')
             customize_api.expose_services(flask_app, safrs_api, project_dir, swagger_host=swagger_host, PORT=port)  # custom services
@@ -431,7 +380,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, ValidationError=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 07.00.58\n'
+    msg = f'API Logic Project loaded (not WSGI), version 07.00.76\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -451,7 +400,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 07.00.58\n'
+    msg = f'API Logic Project Loaded (WSGI), version 07.00.76\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:
