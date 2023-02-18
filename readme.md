@@ -20,7 +20,7 @@ These projects all use the [Northwind Sample Database](https://apilogicserver.gi
 
 &nbsp;
 
-<summary>1. Basic App: Flask / SQLAlchemy -- manually coded app - flexible, but slow</summary>
+<summary>1. Basic App: Flask / SQLAlchemy -- manually coded app - Fully Customizaable, but slow</summary>
 
 This illustrates a typical framework-based approach for creating projects - a minimal project for seeing core Flask and SQLAlchemy services in action.
 
@@ -61,13 +61,13 @@ To run the basic app:
 
 <details markdown>
 
-<summary>2. API Logic Project: Instant, Open</summary>
+<summary>2. API Logic Project: Automation -- Instant, Fully Customizable, Open Source</summary>
 
 &nbsp;
 
 Instead of frameworks, we might consider a Low Code approach.  Low Code tools provide excellent custom user interfaces.  However, these often require extensive screen painting, and typically require a proprietary IDE.
 
-The *2. ApiLogicProject* app provides an alternative, creating an entire project by reading your schema.  This approach is:
+The *2. ApiLogicProject* app provides an alternative, creating an entire project by reading your schema.  This automated approach is:
 
 * **Instant:** faster than Low Code screen painting, with instant APIs and Admin User Interfaces:
 
@@ -79,11 +79,14 @@ The *2. ApiLogicProject* app provides an alternative, creating an entire project
 
       * Custom UIs can be built using your tool of choice (React, Angular, etc), using the API<br><br>
 
+* **Fully Customizable:** use Python and standard IDEs such as VSCode or PyCharm.  
+
+    * All of the key technology concepts you mastered above (Flask, SQLAlchemy) still fully apply.
+
 * **Open:** a fully open approach:
 
-  * **Open Source:** install with pip or docker
+  * **Open Source:** install with pip or docker.
 
-  * **Open Technology:** using standard IDEs such as VSCode or PyCharm.  All of the key technology concepts you mastered above (Flask, SQLAlchemy) still fully apply.
 
 This application was *not coded* - **it was created** using the API Logic Server CLI (Command Language Interface), with 1 command (don't do this now - it's already been done):
 
