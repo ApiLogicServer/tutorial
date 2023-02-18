@@ -20,7 +20,7 @@ These projects all use the [Northwind Sample Database](https://apilogicserver.gi
 
 &nbsp;
 
-<summary>1. Basic App: Flask / SQLAlchemy -- manually coded app - Fully Customizaable, but slow</summary>
+<summary>1. Basic App: Manually Coded -- Learn Flask / SQLAlchemy - Fully Customizeable, but slow</summary>
 
 This illustrates a typical framework-based approach for creating projects - a minimal project for seeing core Flask and SQLAlchemy services in action.
 
