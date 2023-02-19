@@ -6,11 +6,11 @@
 
 <summary>Welcome to this Tutorial</summary>
 
-Use this Tutorial for a quick tour of API Logic Server - automated project creation from a database, and customization including logic.  As a reference background, a "native" hand-coded Flask app (*1. Basic_App*) is provided for experimentation.
-
-The Key Technology Concepts (at end) is an inventory of essential skills for creating Flask/SQLAlchemy systems.  Each are illustrated here.
+Use this Tutorial for a quick tour of API Logic Server - **instant** project creation from a database, **fully customizable** using both standard code and **rules**.  As a reference background, a "native" hand-coded Flask app (*1. Basic_App*) is provided for experimentation.
 
 These projects all use the [Northwind Sample Database](https://apilogicserver.github.io/Docs/Sample-Database/).  Other databases are also provided in Next Steps.
+
+The Key Technology Concepts (at end) is an inventory of essential skills for creating Flask/SQLAlchemy systems.  Each are illustrated here.
 
 </details>
 
@@ -20,7 +20,7 @@ These projects all use the [Northwind Sample Database](https://apilogicserver.gi
 
 <br>
 
-<summary>1. Basic App: Manually Coded -- Learn Flask / SQLAlchemy - Fully Customizeable, but slow</summary>
+<summary>1. Basic App: Manually Coded -- Learn Flask / SQLAlchemy - Fully customizable, but slow</summary>
 
 This illustrates a typical framework-based approach for creating projects - a minimal project for seeing core Flask and SQLAlchemy services in action.
 
