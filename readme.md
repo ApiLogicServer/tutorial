@@ -24,14 +24,6 @@ The Key Technology Concepts (at end) is an inventory of essential skills for cre
 
 This illustrates a typical framework-based approach for creating projects - a minimal project for seeing core Flask and SQLAlchemy services in action.
 
-Frameworks are flexible, and leverage your existing dev environment (IDE, git, etc).  But the manual effort is time-consuming, and complex.  This minimal project does not provide:
-
-* an API endpoint for each table
-
-* a User Interface
-
-* any security, or business logic (multi-table derivations and constraints).
-
 Execute using the Run Configuration, and test with `cURL`.  You can explore key aspects of this app in the [1. Basic_app/readme.md](./1.%20Basic_App/readme.md).
 
 <details markdown>
@@ -42,21 +34,32 @@ Execute using the Run Configuration, and test with `cURL`.  You can explore key 
 
 To run the basic app:
 
-1. Click Run Configurations, and the green button to start the server
+1. Click **Run and Debug** (you should see *1. Basic App: Flask / SQLAlchemy*), and the green button to start the server
 
 2. Copy the `cURL` text, and paste it into the `bash`/`zsh` window
 
 3. When you have reviewed the result, stop the server
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial-tutorial.png?raw=true"></figure>
-
-</details>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app.png?raw=true"></figure>
 
 </details>
 
 &nbsp;
 
+Frameworks are flexible, and leverage your existing dev environment (IDE, git, etc).  But the manual effort is time-consuming, and complex.  This minimal project **does not provide:**
+
+* an API endpoint for each table
+
+* a User Interface
+
+* any security, or business logic (multi-table derivations and constraints).
+
+The next section illustrates an approach that creates executable projects instantly, including support for an API, an Admin App, and logic / security.
+
+
 </details>
+
+&nbsp;
 
 
 <details markdown>
@@ -113,7 +116,7 @@ To run the ApiLogicProject app, **stop the running server** (see figure above), 
 
 Don't spend too much time exploring the app, we'll see a much better version in just a moment...
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial.png?raw=true"></figure>
 
 </details>
 
