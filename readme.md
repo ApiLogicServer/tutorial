@@ -2,7 +2,7 @@
 
 <details markdown>
 
-&nbsp;
+<br>
 
 <summary>Welcome to this Tutorial</summary>
 
@@ -18,7 +18,7 @@ These projects all use the [Northwind Sample Database](https://apilogicserver.gi
 
 <details markdown>
 
-&nbsp;
+<br>
 
 <summary>1. Basic App: Manually Coded -- Learn Flask / SQLAlchemy - Fully Customizeable, but slow</summary>
 
@@ -48,7 +48,7 @@ To run the basic app:
 
 3. When you have reviewed the result, stop the server
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial-tutorial.png?raw=true"></figure>
 
 </details>
 
@@ -63,7 +63,7 @@ To run the basic app:
 
 <summary>2. API Logic Project: Automation -- Instant, Fully Customizable, Open Source</summary>
 
-&nbsp;
+<br>
 
 Instead of frameworks, we might consider a Low Code approach.  Low Code tools provide excellent custom user interfaces.  However, these often require extensive screen painting, and typically require a proprietary IDE.
 
@@ -79,13 +79,9 @@ The *2. ApiLogicProject* app provides an alternative, creating an entire project
 
       * Custom UIs can be built using your tool of choice (React, Angular, etc), using the API<br><br>
 
-* **Fully Customizable:** use Python and standard IDEs such as VSCode or PyCharm.  
+* **Fully Customizable:** use Python and standard IDEs such as VSCode or PyCharm. We'll see several examples in the `ApiLogicProject_Logic`, below. 
 
-    * All of the key technology concepts you mastered above (Flask, SQLAlchemy) still fully apply.
-
-* **Open:** a fully open approach:
-
-  * **Open Source:** install with pip or docker.
+* **Open Source:** install with pip or docker.
 
 
 This application was *not coded* - **it was created** using the API Logic Server CLI (Command Language Interface), with 1 command (don't do this now - it's already been done):
@@ -117,7 +113,7 @@ To run the ApiLogicProject app, **stop the running server** (see figure above), 
 
 Don't spend too much time exploring the app, we'll see a much better version in just a moment...
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial-tutorial.png?raw=true"></figure>
 
 </details>
 
@@ -143,41 +139,27 @@ Let's see how these are addressed, in the next section.
 
 <details markdown>
 
-
 <summary>3. Api Logic Project Logic: Unique Spreadsheet-like Rules -- 40X More Concise</summary>
 
-&nbsp;
+<br>
 
-A running API and UI are a great start, but completing the project still requires logic and security.  This can be as much as half the effort, so we really haven't achieved "Low Code" until these are addressed.
+A running API and UI are a great start, but completing the project requires customization - new endpoints, and particularly business logic for integrity and security.  This can be as much as half the effort, so we really haven't achieved "Low Code" until these are addressed.
 
-A unique feature of API Logic Server is provision for:
+These are addressed using your IDE, with:
 
-* **Business Logic Automation:** using unique spreadsheet-like rules for multi-table derivation and constraint update logic, extensible with Python.  Rules offer significant advantages:
-
-  * Remarkable agility with automatic dependency management - 40x more concise than code
-  * Simplify maintenance with automatic ordering
-  * Improve quality through automatic reuse and partitioning
-  * Faciliate collaboration since business users can read them
+* **Standard Code:** use Flask and SQLAlchemy, exactly as you normally do, and
 
 
-* Rules are **declared in *your IDE,*** with full support for code completion, logging, and debugging.
+* **Logic:** unique spreadsheet-like rules address multi-table constraints and derivations, improving conciseness by a remarkable 40x.  Rules are **declared in *your IDE,*** with full support for code completion, logging, and debugging.
 
-The *3. ApiLogicProject_Logic* application is a clone of the prior example, customized in VSCode:
+Customizations are illustrated in the project [`3. ApiLogicProject_Logic`](3.%20ApiLogicProject_Logic/).  To see the changes, run the app like this:
 
-* **API:** additional endpoints are defined in [```3. ApiLogicProject_Logic/api/customize_api.py```](3.%20ApiLogicProject_Logic/api/customize_api.py)
-
-* **Logic:** the project now implements logic and security
-
-* **User Interface:** the app now has help text that walks you through the key features
-
-You can run the app.  
-
-1. **Stop the server** using the red "stop" button).
-2. **Restart the server** with the same procedure as Step 2, above, but choose Run Configuration ***3. API Logic Project: Logic***.  
+1. **Stop the server** using the red "stop" button.
+2. **Restart the server** with the same procedure as Step 2, above, but choose Run Configuration ***3. API Logic Project: Logic***.<br>
 
 <details markdown>
 
-<summary>Remind me how</summary>
+<summary>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remind me how</summary>
 
 1. Restart the Server:
 
@@ -190,29 +172,25 @@ You can run the app.
 
 </details>
 
-&nbsp;
+<p align="center">
+  <h2 align="center">Explore Key Customizations</h2>
+</p>
+<p align="center">
+  Explore customizations in project: <i>3. ApiLogicProject_Logic</i><br>
+  Click Explore Code to see the code.
+</p>
 
-Observe the customizations in [```3. ApiLogicProject_Logic```](3.%20ApiLogicProject_Logic/)
-
-1. Click Category - you need to **login** now (user u1, password p).  That's because authentication has been activated.
-
-2. Categories has fewer rows per **multi-tenant Grant logic** in [```3. ApiLogicProject_Logic/security/declare_security.py```](3.%20ApiLogicProject_Logic/security/declare_security.py)
-
-3. The app now shows **help text** to introduce its features per updates in [```3. ApiLogicProject_Logic/ui/admin/admin.yaml```](3.%20ApiLogicProject_Logic/ui/admin/admin.yaml)
-
-4. Our Delete Order test adjusts the customer balance, since we how have **business logic** in [```3. ApiLogicProject_Logic/logic/declare_logic.py```](3.%20ApiLogicProject_Logic/logic/declare_logic.py)
-
-5. You can explore the Swagger via *item 2 on the Home* page
-
-    * You will need to authenticate as explained in the [project documentation](https://apilogicserver.github.io/Docs/Security-Swagger/)
-
-    * You can try the customized API with the custom service using *CategoriesEndPoint/get_cats,* authenticated as *u1*.  See  [```3. ApiLogicProject_Logic/api/customize_api.py```](3.%20ApiLogicProject_Logic/api/customize_api.py)
-
-You can use VSCode to *diff* these from their originals in the `2. ApiLogicProject`.
+| Customization Area           | Try It                                                                                                                                                                                            | Click to Explore Code                                                                                  | Notes                |
+|:-----------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------|:---------------------|
+| **Login Authentication**     | Click Category - observe you need to **login** now (user u1, password p)                                                                                                                                  | [```config.py```](3.%20ApiLogicProject_Logic/config.py)                                       | See SECURITY_ENABLED |
+| **Role-Based Authorization** | Observe categories has **fewer rows**                                                                                                                                                                         | [```security/declare_security.py```](3.%20ApiLogicProject_Logic/security/declare_security.py) |                      |
+| **Admin App**                | Observe **help text** describes features                                                                                                                                                 | [```ui/admin/admin.yaml```](3.%20ApiLogicProject_Logic/ui/admin/admin.yaml)                  | Not complex JS, HTML                     |
+| **Multi-table Update Logic** | Delete Order now adjusts the customer balance                                                                                                                                                    | [```logic/declare_logic.py```](3.%20ApiLogicProject_Logic/logic/declare_logic.py)             |  Spreadsheet-like logic                    |                                                                
+| **New API endpoint**         | Use Swagger for endpoint: *CategoriesEndPoint/get_cats*<br><br>See [docs](https://apilogicserver.github.io/Docs/Security-Swagger/) - authenticate as **u1**  | [```api/customize_api.py```](3.%20ApiLogicProject_Logic/api/customize_api.py)                 | Standard Flask/SQLAlchemy  |
 
 &nbsp;
 
-> **Key Take-aways** <br>1. **Instant** project creation<br>2. Spreadsheet-like **Rules**<br>3. Fully Customizable in ***your* IDE**.
+> **Key Take-aways** <br>1. **Instant** project creation -- 1 command for an executable project<br>2. Spreadsheet-like **Rules** -- rules are a key topic, driving agility, quality and collaboration; for more information, [see here](https://apilogicserver.github.io/Docs/Logic-Why/)<br>3. Fully Customizable in ***your* IDE** -- standard Flask/SQLAlchemy
 
 
 </details>
@@ -228,7 +206,6 @@ You can use VSCode to *diff* these from their originals in the `2. ApiLogicProje
 <summary>Next Steps: new projects</summary>
 
 Use the [```Detailed Tutorial```](3.%20ApiLogicProject_Logic/Tutorial.md) to further explore this app.
-
 
 As shown above, it's easy to create projects with a single command.  To help you explore, ApiLogicServer provides several pre-installed sqlite databases.  For example, create a project for this 1 table database:
 
