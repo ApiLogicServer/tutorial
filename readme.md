@@ -6,11 +6,33 @@
 
 <summary>Welcome to this Tutorial</summary>
 
-Use this Tutorial for a quick tour of API Logic Server - **instant** project creation from a database, **fully customizable** using both standard code and **rules**.  As a reference background, a "native" hand-coded Flask app (*1. Basic_App*) is provided for experimentation.
+Use this Tutorial for a quick tour of API Logic Server 
 
-These projects all use the [Northwind Sample Database](https://apilogicserver.github.io/Docs/Sample-Database/).  Other databases are also provided in Next Steps.
+- **Instant** project creation from a database
+- **Fully customizable,** using both standard code (Flask/SQLAlchemy), and **rules** -- in *your* IDE
 
-The Key Technology Concepts (at end) is an inventory of essential skills for creating Flask/SQLAlchemy systems.  Each are illustrated here.
+This contains several projects:
+
+
+| Project | What it is | Use it to... |
+|:---- |:------|:-----------|
+| 1. Basic_App | Hand Coded app - 1 endpoint | Learn basic Flask / SQLAlchemy coding |
+| 2. ApiLogicProject | Northwind Database - Uncustomized | Explore **automated project creation** from Database |
+| 3. ApiLogicProject_Logic | Northwind Database - Customized | Explore **customizing** with code, and rule-based logic |
+| Next Steps | Create other sample databases | More examples - initial project creation from Database |
+
+&nbsp;
+
+Using this tutorial:
+
+- Project 1 is focused on learning Flask/SQLAlchemy.  
+    - You probably want to **skip** this initially.
+    - One advantage of API Logic Server is that you can deliver results *while you learn* Python, Flask and SQLAlchemy.
+- If you want to focus on **project creation,** you can start with *Next Steps*.
+- The Key Technology Concepts (at end) is an inventory of essential skills for creating Flask/SQLAlchemy systems.  Each are illustrated here.
+
+Projects 1-3 use the [Northwind Sample Database](https://apilogicserver.github.io/Docs/Sample-Database/).  
+
 
 </details>
 
@@ -38,9 +60,9 @@ To run the basic app:
 
 2. Copy the `cURL` text, and paste it into the `bash`/`zsh` window
 
-3. When you have reviewed the result, stop the server
+3. When you have reviewed the result ([here's the readme](./1.%20Basic_App/readme.md)), **stop** the server
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial.png?raw=true"></figure>
 
 </details>
 
@@ -116,7 +138,7 @@ To run the ApiLogicProject app, **stop the running server** (see figure above), 
 
 Don't spend too much time exploring the app, we'll see a much better version in just a moment...
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial-tutorial.png?raw=true"></figure>
 
 </details>
 
