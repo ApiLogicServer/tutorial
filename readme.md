@@ -62,7 +62,7 @@ To run the basic app:
 
 3. When you have reviewed the result ([here's the readme](./1.%20Basic_App/readme.md)), **stop** the server
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial-tutorial.png?raw=true"></figure>
 
 </details>
 
@@ -138,7 +138,7 @@ To run the ApiLogicProject app, **stop the running server** (see figure above), 
 
 Don't spend too much time exploring the app, we'll see a much better version in just a moment...
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial-tutorial-tutorial.png?raw=true"></figure>
 
 </details>
 
@@ -217,20 +217,18 @@ Customizations are illustrated in the project [`3. ApiLogicProject_Logic`](3.%20
 
 > **Key Take-aways** <br>1. **Instant** project creation -- 1 command for an executable project<br>2. Spreadsheet-like **Rules** -- rules are a key topic, driving agility, quality and collaboration; for more information, [see here](https://apilogicserver.github.io/Docs/Logic-Why/)<br>3. Fully Customizable in ***your* IDE** -- standard Flask/SQLAlchemy
 
+&nbsp;
+
+Use the [```Detailed Tutorial```](3.%20ApiLogicProject_Logic/Tutorial.md) to further explore this app.
 
 </details>
 
 &nbsp;
-
 <details markdown>
 
 &nbsp;
 
-&nbsp;
-
 <summary>Next Steps: new projects</summary>
-
-Use the [```Detailed Tutorial```](3.%20ApiLogicProject_Logic/Tutorial.md) to further explore this app.
 
 As shown above, it's easy to create projects with a single command.  To help you explore, ApiLogicServer provides several pre-installed sqlite databases.  For example, create a project for this 1 table database:
 
@@ -245,7 +243,7 @@ You can also try these other examples (be sure to `cd tutorial`; use the name be
 * **chinook** - albums and artists
 * **classicmodels** - customers and orders
 
-Launch configurations have been pre-created, then re-execute the Admin app as above.
+Launch configurations have been pre-created, then re-execute the Admin app as above.<br><br>
 
 > Next, try it on your own databases: if you have a database, you can have an API and an Admin app in minutes.
 
@@ -261,6 +259,9 @@ The system provides shorthand notations for the pre-installed sample databases a
 
 </details>
 
+&nbsp;
+
+Click here for the [docs](https://apilogicserver.github.io/Docs/).
 
 </details>
 
