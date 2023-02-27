@@ -46,9 +46,9 @@ If you are running via `pip install` (not Docker or Codespaces), you need to [se
 
 <summary>1. Basic App: Manually Coded -- Learn Flask / SQLAlchemy - Fully customizable, but slow</summary>
 
-This illustrates a typical framework-based approach for creating projects - a minimal project for seeing core Flask and SQLAlchemy services in action.
+This first app (_1. Basic App_) illustrates a typical framework-based approach for creating projects - a minimal project for seeing core Flask and SQLAlchemy services in action.  Let's run/test it, then explore the code.
 
-Execute using the Run Configuration, and test with `cURL`.  You can explore key aspects of this app in the [1. Basic_app/readme.md](./1.%20Basic_App/readme.md).
+To run, use the Run Configuration, and test with `cURL`.  
 
 <details markdown>
 
@@ -64,11 +64,13 @@ To run the basic app:
 
 3. When you have reviewed the result ([here's the readme](./1.%20Basic_App/readme.md)), **stop** the server
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial-tutorial-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial-tutorial.png?raw=true"></figure>
 
 </details>
 
 &nbsp;
+
+You can explore key aspects of this app in the [1. Basic_app/readme.md](./1.%20Basic_App/readme.md).
 
 Frameworks are flexible, and leverage your existing dev environment (IDE, git, etc).  But the manual effort is time-consuming, and complex.  This minimal project **does not provide:**
 
