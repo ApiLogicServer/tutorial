@@ -52,7 +52,7 @@ To run, use the Run Configuration, and test with `cURL`.
 
 <details markdown>
 
-<summary> Show me how </summary>
+<summary>&nbsp;&nbsp;&nbsp;Show me how </summary>
 
 &nbsp;
 
@@ -68,20 +68,30 @@ To run the basic app:
 
 </details>
 
+
 &nbsp;
 
-You can explore key aspects of this app in the [1. Basic_app/readme.md](./1.%20Basic_App/readme.md).
+<details markdown>
+
+<summary>&nbsp;&nbsp;&nbsp;Fully Customizable, but slow</summary>
+
+&nbsp;
 
 Frameworks are flexible, and leverage your existing dev environment (IDE, git, etc).  But the manual effort is time-consuming, and complex.  This minimal project **does not provide:**
 
 * an API endpoint for each table
 
+    * We saw above it's straightforward to provide a *single endpoint.*  It's quite another matter -- *weeks to months* -- to provide endpoints for **all** the tables, with pagination, filtering, and related data access.  That's a horse of an entirely different feather.<br><br>
+
 * a User Interface
 
 * any security, or business logic (multi-table derivations and constraints).
 
-The next section illustrates an approach that creates executable projects instantly, including support for an API, an Admin App, and logic / security.
+Instead of frameworks, we might consider a Low Code approach.  Low Code tools provide excellent custom user interfaces.  However, these often require extensive screen painting, and typically require a proprietary IDE.
 
+The next section introduces an approach that is as flexible as a framework, but faster than Low Code for APIs and Admin Apps.
+
+</details>
 
 </details>
 
@@ -90,19 +100,15 @@ The next section illustrates an approach that creates executable projects instan
 
 <details markdown>
 
-<summary>2. API Logic Project: Automation -- Instant, Fully Customizable, Open Source</summary>
+<summary>2. API Logic Project: Automation -- Customizable as a framework, Faster than Low Code</summary>
 
 <br>
 
-Instead of frameworks, we might consider a Low Code approach.  Low Code tools provide excellent custom user interfaces.  However, these often require extensive screen painting, and typically require a proprietary IDE.
-
-The *2. ApiLogicProject* app provides an alternative, creating an entire project by reading your schema.  This automated approach is:
+The *2. ApiLogicProject* app illustrates an alternative, creating an entire project by reading your schema.  This automated approach is:
 
 * **Instant:** faster than Low Code screen painting, with instant APIs and Admin User Interfaces:
 
   * **API:** an endpoint for each table, with filtering, sorting, pagination and related data access.  Swagger is automatic.
-
-      * We saw above it's straightforward to provide a *single endpoint.*  It's quite another matter -- *weeks to months* -- to provide endpoints for **all** the tables, that include all the services noted above.  That's a horse of an entirely different feather.<br><br>
 
   * **Admin UI:** multi-page / multi-table apps, with page navigations, automatic joins and declarative hide/show.  It executes a yaml file, so basic customizations do not require HTML or JavaScript background.
 
@@ -118,6 +124,7 @@ This application was *not coded* - **it was created** using the API Logic Server
 ```bash
 ApiLogicServer create --project_name=ApiLogicProject --db_url=nw-  # use Northwind, no customizations
 ```
+&nbsp;
 
 To execute (see *Show me how*, below, for details): **restart the server** with **Run and Debug >> *2. API Logic Server: Instant, Open***, and then start the Browser at localhost:5656 **(url in the console log)**
 
@@ -125,7 +132,7 @@ To execute (see *Show me how*, below, for details): **restart the server** with 
 
 <details markdown>
 
-<summary> Show me how </summary>
+<summary>&nbsp;&nbsp;&nbsp;Show me how </summary>
 
 &nbsp;
 
@@ -140,15 +147,23 @@ To run the ApiLogicProject app, **stop the running server** (see figure above), 
 
 2. Start the Browser at localhost:5656, using the **url shown in the console log**
 
+You can explore key aspects of this app in the [1. Basic_app/readme.md](./1.%20Basic_App/readme.md).
+
 Don't spend too much time exploring the app, we'll see a much better version in just a moment...
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial-tutorial-tutorial-tutorial.png?raw=true"></figure>
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial-tutorial.png?raw=true"></figure>
 
 </details>
 
 &nbsp;
 
 > Key Takeway: you will achieve this level automation for your projects: provide a database, get an instant API and Admin App.  Then, customize in your IDE. 
+
+&nbsp;
+
+<details markdown>
+
+<summary>&nbsp;&nbsp;&nbsp;Instant, But Customization Required</summary>
 
 &nbsp;
 
@@ -164,11 +179,13 @@ Let's see how these are addressed, in the next section.
 
 </details>
 
+</details>
+
 &nbsp;
 
 <details markdown>
 
-<summary>3. Api Logic Project Logic: Unique Spreadsheet-like Rules -- 40X More Concise</summary>
+<summary>3. Api Logic Project Logic: Customized -- Code and unique spreadsheet-like Rules (40X more concise)</summary>
 
 <br>
 
