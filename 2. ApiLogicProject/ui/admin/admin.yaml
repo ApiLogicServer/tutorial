@@ -1,5 +1,5 @@
 about:
-  date: February 27, 2023 22:50:22
+  date: February 28, 2023 09:28:28
   recent_changes: works with modified safrs-react-admin
   version: 0.0.0
 api_root: '{http_type}://{swagger_host}:{port}/{api}'
@@ -214,8 +214,8 @@ resources:
     tab_groups:
     - direction: tomany
       fks:
-      - Country
       - City
+      - Country
       name: OrderList
       resource: Order
     type: Location
@@ -229,7 +229,7 @@ resources:
     - name: CloneFromOrder
     - name: CustomerId
       required: true
-    - name: Country
+    - name: City
     - name: EmployeeId
       required: true
     - name: OrderDate
@@ -246,7 +246,7 @@ resources:
     - name: ShipPostalCode
     - name: ShipCountry
     - name: AmountTotal
-    - name: City
+    - name: Country
     - name: Ready
     - name: OrderDetailCount
     tab_groups:
@@ -272,8 +272,8 @@ resources:
       resource: Customer
     - direction: toone
       fks:
-      - Country
       - City
+      - Country
       name: Location
       resource: Location
     - direction: toone
