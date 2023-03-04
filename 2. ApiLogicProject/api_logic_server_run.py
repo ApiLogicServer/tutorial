@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file initializes and starts the API Logic Server (v 08.01.01, February 28, 2023 09:28:28):
+    This file initializes and starts the API Logic Server (v 08.01.04, March 04, 2023 15:04:39):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -86,12 +86,13 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created February 28, 2023 09:28:28 at {str(current_path)}\n')
+app_logger.info(f'Created March 04, 2023 15:04:39 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://apilogicserver.github.io/Docs/Project-Env/
 from logic_bank.logic_bank import LogicBank
 from logic_bank.exec_row_logic.logic_row import LogicRow
+from logic_bank.rule_type.constraint import Constraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 import socket
@@ -271,8 +272,7 @@ def get_args():
 # Creates flask_app, Opens Database, Activates API and Logic 
 # ==========================================================
 
-def create_app(swagger_host: str = None, swagger_port: int = None):
-
+def create_app(swagger_host: str = "localhost", swagger_port: str = "5656"):
     """ Creates flask_app, Opens Database, Activates API and Logic """ 
 
     from sqlalchemy import exc as sa_exc
@@ -294,7 +294,7 @@ def create_app(swagger_host: str = None, swagger_port: int = None):
         # https://stackoverflow.com/questions/34674029/sqlalchemy-query-raises-unnecessary-warning-about-sqlite-and-decimal-how-to-spe
         warnings.simplefilter("ignore", category=sa_exc.SAWarning)  # alert - disable for safety msgs
 
-        def constraint_handler(message: str, constraint: object, logic_row: LogicRow):
+        def constraint_handler(message: str, constraint: Constraint, logic_row: LogicRow):
             """ format LogicBank constraint exception for SAFRS """
             if constraint.error_attributes:
                 detail = {"model": logic_row.name, "error_attributes": constraint.error_attributes}
@@ -304,22 +304,13 @@ def create_app(swagger_host: str = None, swagger_port: int = None):
 
         admin_enabled = os.name != "nt"
         admin_enabled = False
-
         """ internal use, for future enhancements """
         if admin_enabled:
             flask_app.config.update(SQLALCHEMY_BINDS={'admin': 'sqlite:////tmp/4LSBE.sqlite.4'})
 
         db = SQLAlchemy()
-
         db.init_app(flask_app)
         with flask_app.app_context():
-            if admin_enabled:
-                db.create_all()
-                db.create_all(bind='admin')
-                session.commit()
-
-            # VH moved from api import expose_api_models, customize_api
-            # app_logger.info(f'\nDeclare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}')
 
             with open(Path(current_path).joinpath('security/system/custom_swagger.json')) as json_file:
                 custom_swagger = json.load(json_file)
@@ -327,6 +318,11 @@ def create_app(swagger_host: str = None, swagger_port: int = None):
 
             db = safrs.DB  # valid only after is initialized, above
             session: Session = db.session
+
+            if admin_enabled:  # unused (internal dev use)
+                db.create_all()
+                db.create_all(bind='admin')
+                session.commit()
 
             from api import expose_api_models, customize_api
             app_logger.info(f'\nDeclare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}\n')
@@ -340,7 +336,7 @@ def create_app(swagger_host: str = None, swagger_port: int = None):
             app_logger.info(f'Customize API - api/expose_service.py, exposing custom services')
             customize_api.expose_services(flask_app, safrs_api, project_dir, swagger_host=swagger_host, PORT=port)  # custom services
 
-            method_decorators=[]
+            method_decorators : list = []
             if Config.SECURITY_ENABLED:
                 configure_auth(flask_app, database, method_decorators)
             
@@ -377,10 +373,10 @@ if verbose:
 flask_app = create_app(swagger_host = swagger_host, swagger_port = swagger_port)
 
 admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = swagger_port,
-    API_PREFIX=API_PREFIX, ValidationError=ValidationError, http_type = http_type)
+    API_PREFIX=API_PREFIX, validation_error=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 08.01.01\n'
+    msg = f'API Logic Project loaded (not WSGI), version 08.01.04\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -400,7 +396,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 08.01.01\n'
+    msg = f'API Logic Project Loaded (WSGI), version 08.01.04\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:

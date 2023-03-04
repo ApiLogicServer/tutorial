@@ -10,14 +10,16 @@ from sqlalchemy.ext.declarative import declarative_base
 #
 # Alter this file per your database maintenance policy
 #    See https://apilogicserver.github.io/Docs/Project-Rebuild/#rebuilding
+#
+# mypy: ignore-errors
 
 from safrs import SAFRSBase
 from flask_login import UserMixin
-import safrs
+import safrs, flask_sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy() 
-Base = declarative_base()
+Base = declarative_base()  # type: flask_sqlalchemy.model.DefaultMeta
 metadata = Base.metadata
 
 #NullType = db.String  # datatype fixup
@@ -30,7 +32,7 @@ from sqlalchemy.dialects.sqlite import *
 
 class Category(SAFRSBase, Base):
     __tablename__ = 'CategoryTableNameTest'
-    _s_collection_name = 'Category'
+    _s_collection_name = 'Category'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -41,7 +43,7 @@ class Category(SAFRSBase, Base):
 
 class Customer(SAFRSBase, Base):
     __tablename__ = 'Customer'
-    _s_collection_name = 'Customer'
+    _s_collection_name = 'Customer'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(String(8000), primary_key=True)
@@ -67,7 +69,7 @@ class Customer(SAFRSBase, Base):
 
 class CustomerDemographic(SAFRSBase, Base):
     __tablename__ = 'CustomerDemographic'
-    _s_collection_name = 'CustomerDemographic'
+    _s_collection_name = 'CustomerDemographic'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(String(8000), primary_key=True)
@@ -77,7 +79,7 @@ class CustomerDemographic(SAFRSBase, Base):
 
 class Department(SAFRSBase, Base):
     __tablename__ = 'Department'
-    _s_collection_name = 'Department'
+    _s_collection_name = 'Department'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -93,7 +95,7 @@ class Department(SAFRSBase, Base):
 
 class Location(SAFRSBase, Base):
     __tablename__ = 'Location'
-    _s_collection_name = 'Location'
+    _s_collection_name = 'Location'  # type: ignore
     __bind_key__ = 'None'
 
     country = Column(String(50), primary_key=True)
@@ -106,7 +108,7 @@ class Location(SAFRSBase, Base):
 
 class Product(SAFRSBase, Base):
     __tablename__ = 'Product'
-    _s_collection_name = 'Product'
+    _s_collection_name = 'Product'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -126,7 +128,7 @@ class Product(SAFRSBase, Base):
 
 class Region(SAFRSBase, Base):
     __tablename__ = 'Region'
-    _s_collection_name = 'Region'
+    _s_collection_name = 'Region'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -135,7 +137,7 @@ class Region(SAFRSBase, Base):
 
 class SampleDBVersion(SAFRSBase, Base):
     __tablename__ = 'SampleDBVersion'
-    _s_collection_name = 'SampleDBVersion'
+    _s_collection_name = 'SampleDBVersion'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -144,7 +146,7 @@ class SampleDBVersion(SAFRSBase, Base):
 
 class Shipper(SAFRSBase, Base):
     __tablename__ = 'Shipper'
-    _s_collection_name = 'Shipper'
+    _s_collection_name = 'Shipper'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -154,7 +156,7 @@ class Shipper(SAFRSBase, Base):
 
 class Supplier(SAFRSBase, Base):
     __tablename__ = 'Supplier'
-    _s_collection_name = 'Supplier'
+    _s_collection_name = 'Supplier'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -173,7 +175,7 @@ class Supplier(SAFRSBase, Base):
 
 class Territory(SAFRSBase, Base):
     __tablename__ = 'Territory'
-    _s_collection_name = 'Territory'
+    _s_collection_name = 'Territory'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(String(8000), primary_key=True)
@@ -186,7 +188,7 @@ class Territory(SAFRSBase, Base):
 
 class Union(SAFRSBase, Base):
     __tablename__ = 'Union'
-    _s_collection_name = 'Union'
+    _s_collection_name = 'Union'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -204,7 +206,7 @@ t_sqlite_sequence = Table(
 
 class Employee(SAFRSBase, Base):
     __tablename__ = 'Employee'
-    _s_collection_name = 'Employee'
+    _s_collection_name = 'Employee'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -243,7 +245,7 @@ class Employee(SAFRSBase, Base):
 
 class EmployeeAudit(SAFRSBase, Base):
     __tablename__ = 'EmployeeAudit'
-    _s_collection_name = 'EmployeeAudit'
+    _s_collection_name = 'EmployeeAudit'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)
@@ -259,7 +261,7 @@ class EmployeeAudit(SAFRSBase, Base):
 
 class EmployeeTerritory(SAFRSBase, Base):
     __tablename__ = 'EmployeeTerritory'
-    _s_collection_name = 'EmployeeTerritory'
+    _s_collection_name = 'EmployeeTerritory'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(String(8000), primary_key=True)
@@ -273,7 +275,7 @@ class EmployeeTerritory(SAFRSBase, Base):
 
 class Order(SAFRSBase, Base):
     __tablename__ = 'Order'
-    _s_collection_name = 'Order'
+    _s_collection_name = 'Order'  # type: ignore
     __bind_key__ = 'None'
     __table_args__ = (
         ForeignKeyConstraint(['Country', 'City'], ['Location.country', 'Location.city']),
@@ -311,7 +313,7 @@ class Order(SAFRSBase, Base):
 
 class OrderDetail(SAFRSBase, Base):
     __tablename__ = 'OrderDetail'
-    _s_collection_name = 'OrderDetail'
+    _s_collection_name = 'OrderDetail'  # type: ignore
     __bind_key__ = 'None'
 
     Id = Column(Integer, primary_key=True)

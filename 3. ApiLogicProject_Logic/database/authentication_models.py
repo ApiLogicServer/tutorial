@@ -15,14 +15,16 @@ from flask_jwt_extended import create_access_token
 #
 # Alter this file per your database maintenance policy
 #    See https://apilogicserver.github.io/Docs/Project-Rebuild/#rebuilding
+#
+# mypy: ignore-errors
 
 from safrs import SAFRSBase
 from flask_login import UserMixin
-import safrs
+import safrs, flask_sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy() 
-Baseauthentication = declarative_base()
+Baseauthentication = declarative_base()  # type: flask_sqlalchemy.model.DefaultMeta
 metadata = Baseauthentication.metadata
 
 #NullType = db.String  # datatype fixup
@@ -33,9 +35,9 @@ from sqlalchemy.dialects.sqlite import *
 
 
 
-class Role(SAFRSBase, Baseauthentication, db.Model, UserMixin):
+class Role(SAFRSBase, Baseauthentication, db.Model, UserMixin):  # type: ignore
     __tablename__ = 'Role'
-    _s_collection_name = 'authentication-Role'
+    _s_collection_name = 'authentication-Role'  # type: ignore
     __bind_key__ = 'authentication'
 
     name = Column(String(64), primary_key=True)
@@ -44,9 +46,9 @@ class Role(SAFRSBase, Baseauthentication, db.Model, UserMixin):
     UserRoleList = relationship('UserRole', cascade_backrefs=True, backref='Role')
 
 
-class User(SAFRSBase, Baseauthentication, db.Model, UserMixin):
+class User(SAFRSBase, Baseauthentication, db.Model, UserMixin):  # type: ignore
     __tablename__ = 'User'
-    _s_collection_name = 'authentication-User'
+    _s_collection_name = 'authentication-User'  # type: ignore
     __bind_key__ = 'authentication'
 
     name = Column(String(128))
@@ -95,9 +97,9 @@ t_sqlite_sequence = Table(
 )
 
 
-class Api(SAFRSBase, Baseauthentication, db.Model, UserMixin):
+class Api(SAFRSBase, Baseauthentication, db.Model, UserMixin):  # type: ignore
     __tablename__ = 'Apis'
-    _s_collection_name = 'authentication-Api'
+    _s_collection_name = 'authentication-Api'  # type: ignore
     __bind_key__ = 'authentication'
 
     id = Column(Integer, primary_key=True)
@@ -108,9 +110,9 @@ class Api(SAFRSBase, Baseauthentication, db.Model, UserMixin):
     # see backref on parent: owner = relationship('User', cascade_backrefs=True, backref='ApiList')
 
 
-class UserRole(SAFRSBase, Baseauthentication, db.Model, UserMixin):
+class UserRole(SAFRSBase, Baseauthentication, db.Model, UserMixin):  # type: ignore
     __tablename__ = 'UserRole'
-    _s_collection_name = 'authentication-UserRole'
+    _s_collection_name = 'authentication-UserRole'  # type: ignore
     __bind_key__ = 'authentication'
 
     user_id = Column(ForeignKey('User.id'), primary_key=True)
