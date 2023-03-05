@@ -1,5 +1,5 @@
 # coding: utf-8
-from sqlalchemy import Boolean, Column, DECIMAL, Date, Float, ForeignKey, ForeignKeyConstraint, Integer, LargeBinary, String, Table, Text, text
+from sqlalchemy import Boolean, Column, DECIMAL, Date, Float, ForeignKey, ForeignKeyConstraint, Integer, String, Table, Text, text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import NullType
 from sqlalchemy.ext.declarative import declarative_base
@@ -223,7 +223,6 @@ class Employee(SAFRSBase, Base):
     Country = Column(String(8000))
     HomePhone = Column(String(8000))
     Extension = Column(String(8000))
-    Photo = Column(LargeBinary)
     Notes = Column(String(8000))
     ReportsTo = Column(Integer, index=True)
     PhotoPath = Column(String(8000))
