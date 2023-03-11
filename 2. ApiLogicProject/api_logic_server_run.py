@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file initializes and starts the API Logic Server (v 08.01.09, March 10, 2023 13:28:00):
+    This file initializes and starts the API Logic Server (v 08.01.10, March 10, 2023 21:11:44):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -86,7 +86,7 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created March 10, 2023 13:28:00 at {str(current_path)}\n')
+app_logger.info(f'Created March 10, 2023 21:11:44 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://apilogicserver.github.io/Docs/Project-Env/
@@ -325,32 +325,31 @@ def create_app(swagger_host: str = "localhost", swagger_port: str = "5656"):
                 session.commit()
 
             from api import expose_api_models, customize_api
-            app_logger.info(f'\nDeclare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}\n')
 
             import database.models
+            app_logger.info("Data Model Loaded, customizing...")
+            from database import customize_models
+
             from logic import declare_logic
+            app_logger.info("")
             LogicBank.activate(session=session, activator=declare_logic.declare_logic, constraint_event=constraint_handler)
             app_logger.info("Declare   Logic complete - logic/declare_logic.py (rules + code)"
                 + f' -- {len(database.models.metadata.tables)} tables loaded\n')  # db opened 1st access
             
-            app_logger.info(f'Customize API - api/expose_service.py, exposing custom services')
+            method_decorators : list = []
+            expose_api_models.expose_models(safrs_api, method_decorators)
+            app_logger.info(f'Declare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}, customizing...')
             customize_api.expose_services(flask_app, safrs_api, project_dir, swagger_host=swagger_host, PORT=port)  # custom services
 
-            method_decorators : list = []
             if Config.SECURITY_ENABLED:
                 configure_auth(flask_app, database, method_decorators)
-            
-            expose_api_models.expose_models(safrs_api, method_decorators)
 
             from database.bind_databases import open_databases
             open_databases(flask_app, session, safrs_api, method_decorators)
 
-            app_logger.info("\nCustomize Data Model - database/customize_models.py")
-            from database import customize_models
-
             if Config.SECURITY_ENABLED:
                 from security import declare_security  # activate security
-                app_logger.info("\nDeclare Security - security/declare_security.py"
+                app_logger.info("..declare security - security/declare_security.py"
                     + f' -- {len(database.authentication_models.metadata.tables)} authentication tables loaded')
 
             SAFRSBase._s_auto_commit = False
@@ -376,7 +375,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, validation_error=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 08.01.09\n'
+    msg = f'API Logic Project loaded (not WSGI), version 08.01.10\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -396,7 +395,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 08.01.09\n'
+    msg = f'API Logic Project Loaded (WSGI), version 08.01.10\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:
