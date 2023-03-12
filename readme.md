@@ -64,9 +64,8 @@ To run the basic app:
 
 3. When you have reviewed the result ([here's the readme](./1.%20Basic_App/readme.md)), **stop** the server
 
-![](https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial-tutorial.png?raw=true)
+![](https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial.png?raw=true)
 
-<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial.png?raw=true"></figure>
 
 </details>
 
@@ -136,6 +135,8 @@ To execute (see *Show me how*, below, for details): **restart the server** with 
 
 <summary>&nbsp;&nbsp;&nbsp;Show me how </summary>
 
+![](https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/2-apilogicproject-tutorial.png?raw=true)
+
 &nbsp;
 
 </details>
@@ -157,7 +158,7 @@ API Logic server installs with `pip`, in a docker container, or in codespaces.  
 * **CLI:** the `ApiLogicServer create` command you saw above
 * **Runtime Packages:** for API, UI and Logic execution
 
-![](https://apilogicserver.github.io/Docs/images/Architecture-What-Is-tutorial.png)
+![](https://apilogicserver.github.io/Docs/images/Architecture-What-Is.png)
 
 &nbsp;
 
@@ -166,7 +167,7 @@ It operates as shown below:
 * Reads your database to create an executable API Logic Project; customize and debug it in VSCode, PyCharm, etc.
 * The executing server is a standard horizontally scalable Flask project, using SQLAlchemy for database access.  
 
-![](https://apilogicserver.github.io/Docs/images/creates-and-runs-tutorial.png)
+![](https://apilogicserver.github.io/Docs/images/creates-and-runs.png)
 
 For production deployment, the project includes a dockerfile to containerize it to DockerHub.
 
@@ -232,7 +233,7 @@ Customizations are illustrated in the project [`3. ApiLogicProject_Logic`](3.%20
 
 2. Start the Browser at localhost:5656, using the **url shown in the console log**
 
-![](https://apilogicserver.github.io/Docs/images/tutorial/2-apilogicproject-tutorial-tutorial.png)
+![](https://apilogicserver.github.io/Docs/images/tutorial/2-apilogicproject-tutorial.png)
 
 </details>
 
