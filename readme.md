@@ -66,6 +66,7 @@ To run the basic app:
 
 ![](https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial-tutorial.png?raw=true)
 
+<figure><img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/tutorial/1-basic-app-tutorial.png?raw=true"></figure>
 
 </details>
 
