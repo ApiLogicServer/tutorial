@@ -223,3 +223,31 @@ def rows_to_dict(result: flask_sqlalchemy.BaseQuery) -> list:
             row_as_dict = each_row.to_dict()
         rows.append(row_as_dict)
     return rows
+
+
+def sys_info():  
+    """
+    Print env and path
+    """  
+    import os, socket
+    print("\n\nsys_info here")
+    print("\nEnvironment Variables...")
+    env = os.environ
+    for each_variable in os.environ:
+            print(f'.. {each_variable} = {env[each_variable]}')
+
+    print("\nPYTHONPATH..")
+    for p in sys.path:
+        print(".." + p)
+        
+    print("")
+    print(f'sys.prefix (venv): {sys.prefix}\n')
+
+    print("")
+    hostname = socket.gethostname()
+    try:
+        local_ip = socket.gethostbyname(hostname)
+    except:
+        local_ip = f"Warning - Failed local_ip = socket.gethostbyname(hostname) with hostname: {hostname}"
+
+    print(f"hostname={hostname} on local_ip={local_ip}\n\n")

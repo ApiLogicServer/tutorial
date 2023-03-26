@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file initializes and starts the API Logic Server (v 08.01.12, March 16, 2023 10:29:38):
+    This file initializes and starts the API Logic Server (v 08.01.15, March 25, 2023 17:29:26):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -55,6 +55,7 @@ current_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_path)
 project_dir = str(current_path)
 os.chdir(project_dir)  # so admin app can find images, code
+import util as util
 
 
 # ==================================
@@ -86,7 +87,7 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created March 16, 2023 10:29:38 at {str(current_path)}\n')
+app_logger.info(f'Created March 25, 2023 17:29:26 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://apilogicserver.github.io/Docs/Project-Env/
@@ -365,9 +366,16 @@ def create_app(swagger_host: str = "localhost", swagger_port: str = "5656"):
 # ================================== 
 
 (flask_host, swagger_host, port, swagger_port, http_type, verbose, create_and_run) = get_args()
+if os.getenv('SWAGGER_HOST'):
+    swagger_host = os.getenv('SWAGGER_HOST')  # type: ignore # type: str
+if os.getenv('VERBOSE'):
+    verbose = True  # type: ignore # type: str
 
 if verbose:
     app_logger.setLevel(logging.DEBUG)
+    safrs.log.setLevel(logging.DEBUG)  # debug is 10, warn is 20, info 30
+if True or app_logger.getEffectiveLevel() == logging.DEBUG:
+    util.sys_info()
 
 flask_app = create_app(swagger_host = swagger_host, swagger_port = swagger_port)
 
@@ -375,7 +383,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, validation_error=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 08.01.12\n'
+    msg = f'API Logic Project loaded (not WSGI), version 08.01.15\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -395,7 +403,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 08.01.12\n'
+    msg = f'API Logic Project Loaded (WSGI), version 08.01.15\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:
