@@ -218,7 +218,7 @@ Let's see how these are addressed, in the next sections.
 
 <details markdown>
 
-<summary>2. Customized -- Admin App, New Endpoint</summary>
+<summary>2. Customized -- Admin App, New Endpoint... Standard Dev Tools</summary>
 
 <br>
 
@@ -429,21 +429,11 @@ Click here for the [docs](https://apilogicserver.github.io/Docs/).
 
 <summary> Notes </summary>
 
-
-
-
-Please find additional notes below.
-
-<details markdown>
-
-<summary> Project Structure </summary>
-
 &nbsp;
 
+**Project Structure**
+
 This tutorial is actually 3 independent projects.  When you create a project using `ApiLogicServer create --project_name=my_project`, the system will create a free-standing project.  The project will include your container settings, IDE settings etc, so you can just open it your IDE to run and debug.
-
-</details>
-
 
 </details>
 
