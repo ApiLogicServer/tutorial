@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file initializes and starts the API Logic Server (v 08.01.24, April 11, 2023 13:35:06):
+    This file initializes and starts the API Logic Server (v 08.02.00, April 13, 2023 18:23:53):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -87,7 +87,7 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created April 11, 2023 13:35:06 at {str(current_path)}\n')
+app_logger.info(f'Created April 13, 2023 18:23:53 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://apilogicserver.github.io/Docs/Project-Env/
@@ -374,7 +374,7 @@ if os.getenv('VERBOSE'):
 if verbose:
     app_logger.setLevel(logging.DEBUG)
     safrs.log.setLevel(logging.DEBUG)  # debug is 10, warn is 20, info 30
-if True or app_logger.getEffectiveLevel() == logging.DEBUG:
+if app_logger.getEffectiveLevel() == logging.DEBUG:
     util.sys_info()
 
 flask_app = create_app(swagger_host = swagger_host, swagger_port = swagger_port)
@@ -383,7 +383,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, validation_error=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 08.01.24\n'
+    msg = f'API Logic Project loaded (not WSGI), version 08.02.00\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -403,7 +403,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 08.01.24\n'
+    msg = f'API Logic Project Loaded (WSGI), version 08.02.00\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:
