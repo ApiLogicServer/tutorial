@@ -12,10 +12,10 @@ app_logger = logging.getLogger(__name__)
 app_logger.debug("\napi/expose_api_models.py - endpoint for each table")
 
 
-def expose_models(api, method_decorators = []):  # th 
+def expose_models(api, method_decorators = []): 
     """
         Declare API - on existing SAFRSAPI 
-            This exposes each model (note: end point names are table names) 
+            This exposes each model - API automation
             Including get (filtering, pagination, related data access) 
             And post/patch/update (including logic enforcement) 
         You typically do not customize this file 
