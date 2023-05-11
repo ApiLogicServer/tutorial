@@ -3,7 +3,7 @@
 """
 ==============================================================================
 
-    This file initializes and starts the API Logic Server (v 08.04.00, May 08, 2023 08:54:45):
+    This file initializes and starts the API Logic Server (v 08.04.02, May 11, 2023 06:23:42):
         $ python3 api_logic_server_run.py [--help]
 
     Then, access the Admin App and API via the Browser, eg:  
@@ -100,7 +100,7 @@ for each_arg in sys.argv:
         args += ", "
 project_name = os.path.basename(os.path.normpath(current_path))
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created May 08, 2023 08:54:45 at {str(current_path)}\n')
+app_logger.info(f'Created May 11, 2023 06:23:42 at {str(current_path)}\n')
 
 from typing import TypedDict
 import safrs  # fails without venv - see https://apilogicserver.github.io/Docs/Project-Env/
@@ -305,6 +305,8 @@ def create_app(swagger_host: str = "localhost", swagger_port: str = "5656"):
         if do_hide_chatty_logging and app_logger.getEffectiveLevel() <= logging.INFO:
             safrs.log.setLevel(logging.WARN)  # debug is 10, warn is 20, info 30
             db_logger.setLevel(logging.WARN)
+            safrs_init_logger = logging.getLogger("safrs.safrs_init")
+            safrs_init_logger.setLevel(logging.WARN)
         flask_app.config.from_object("config.Config")
 
         # https://stackoverflow.com/questions/34674029/sqlalchemy-query-raises-unnecessary-warning-about-sqlite-and-decimal-how-to-spe
@@ -358,6 +360,7 @@ def create_app(swagger_host: str = "localhost", swagger_port: str = "5656"):
                 + f' -- {len(database.models.metadata.tables)} tables loaded\n')  # db opened 1st access
             
             method_decorators : list = []
+            safrs_init_logger.setLevel(logging.WARN)
             expose_api_models.expose_models(safrs_api, method_decorators)
             app_logger.info(f'Declare   API - api/expose_api_models, endpoint for each table on {swagger_host}:{swagger_port}, customizing...')
             customize_api.expose_services(flask_app, safrs_api, project_dir, swagger_host=swagger_host, PORT=port)  # custom services
@@ -403,7 +406,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, validation_error=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 08.04.00\n'
+    msg = f'API Logic Project loaded (not WSGI), version 08.04.02\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -423,7 +426,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 08.04.00\n'
+    msg = f'API Logic Project Loaded (WSGI), version 08.04.02\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:
