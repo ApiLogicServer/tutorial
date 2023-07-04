@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 
-"""
-==============================================================================
+###############################################################################
+#
+#    This file initializes and starts the API Logic Server (v 09.00.14, July 04, 2023 14:33:15):
+#        $ python3 api_logic_server_run.py [--help]
+#
+#    Then, access the Admin App and API via the Browser, eg:  
+#        http://localhost:5656
+#
+#    You typically do not customize this file,
+#        except to override Creation Defaults and Logging, below.
+#
+#    See Main Code (at end).
+#        Use log messages to understand API and Logic activation.
+#
+###############################################################################
 
-    This file initializes and starts the API Logic Server (v 09.00.00, June 24, 2023 10:51:48):
-        $ python3 api_logic_server_run.py [--help]
-
-    Then, access the Admin App and API via the Browser, eg:  
-        http://localhost:5656
-
-    You typically do not customize this file,
-        except to override Creation Defaults and Logging, below.
-
-    See Main Code (at end).
-        Use log messages to understand API and Logic activation.
-
-==============================================================================
-"""
 
 import traceback
 try:
@@ -117,7 +116,7 @@ if debug_value is not None:  # > export APILOGICPROJECT_DEBUG=True
         app_logger.setLevel(logging.DEBUG)
         app_logger.debug(f'\nDEBUG level set from env\n')
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with args: \n.. {args}\n')
-app_logger.info(f'Created June 24, 2023 10:51:48 at {str(current_path)}\n')
+app_logger.info(f'Created July 04, 2023 14:33:15 at {str(current_path)}\n')
 
 
 class ValidationErrorExt(ValidationError):
@@ -375,7 +374,7 @@ admin_events(flask_app = flask_app, swagger_host = swagger_host, swagger_port = 
     API_PREFIX=API_PREFIX, validation_error=ValidationError, http_type = http_type)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 09.00.00\n'
+    msg = f'API Logic Project loaded (not WSGI), version 09.00.14\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {flask_host} - may require refresh)\n'
     else:
@@ -395,7 +394,7 @@ if __name__ == "__main__":
 
     flask_app.run(host=flask_host, threaded=True, port=port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 09.00.00\n'
+    msg = f'API Logic Project Loaded (WSGI), version 09.00.14\n'
     if is_docker():
         msg += f' (running from docker container at {flask_host} - may require refresh)\n'
     else:
