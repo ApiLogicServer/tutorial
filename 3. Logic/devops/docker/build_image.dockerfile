@@ -1,7 +1,7 @@
 # To build image for your ApiLogicProject, see build_image.sh
 
 # consider adding your version here
-FROM apilogicserver/api_logic_server  
+FROM apilogicserver/api_logic_server_arm  
 
 USER root
 
