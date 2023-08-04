@@ -3,6 +3,9 @@ import requests, pdb
 import test_utils
 import json
 
+host = "localhost"
+port = "5656"
+
 @given('Sample Database')
 def step_impl(context):
     assert True
