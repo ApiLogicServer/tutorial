@@ -3,9 +3,11 @@
 # To build container for your ApiLogicProject:
 #    create / customize your project as you normally would
 #    edit this file: change your_account/your_repository as appropriate
+#    be sure to add security (already done for demo)
+
 #    in terminal (not in VSCode docker - docker is not installed there)
 #    $ cd <your project>
-#    $ sh devops/docker-image/build_image.sh
+#    $ sh devops/docker-image/build_image.sh .
 
 projectname="1. instant_creation"  # lower case, only
 repositoryname="apilogicserver"
@@ -39,6 +41,8 @@ else
   projectname="$2"
   version="$3"
 fi
+
+echo "Building ${repositoryname}/${projectname}\n"
 
 docker build -f devops/docker-image/build_image.dockerfile -t ${repositoryname}/${projectname} --rm .
 
