@@ -2,8 +2,8 @@
 
 # intended for use in portal cli - not to be run on your local machine.
 
-projectname="1. instant_creation"  # lower case, only
-resourcegroup="1. instant_creation_rg"
+projectname="1. instantcreation"  # lower case, only
+resourcegroup="1. instantcreation_rg"
 dockerrepositoryname="apilogicserver"  # change this to your DockerHub Repository
 githubaccount="apilogicserver"         # change this to your GitHub account
 version="1.0.0"
@@ -13,8 +13,8 @@ version="1.0.0"
 # which uses: https://github.com/Azure-Samples/multicontainerwordpress
 
 # login to Azure Portal CLI (substitute your github account for apilogicserver)
-# git clone https://github.com/apilogicserver/1. instant_creation.git
-# cd 1. instant_creation
+# git clone https://github.com/apilogicserver/1. instantcreation.git
+# cd 1. instantcreation
 # sh devops/docker-compose-dev-azure/azure-deploy.sh
 
 echo " "
@@ -54,10 +54,12 @@ echo " "
 # security assumed; disable this if you are not using security
 if [ ! -f "./database/authentication_models.py" ] 
 then
-    echo "\nYou need to activate security first.  With mysql-container running...\n" 
-    echo "ApiLogicServer add-auth --project_name=. --db_url=mysql+pymysql://root:p@localhost:3306/authdb"
+    echo "\nYou need to activate security first.  With you database running, ...\n" 
+    echo "ApiLogicServer add-auth --project_name=. --db_url=mysql+pymysql://root:p@localhost:3306/authdb, or..."
+    echo "ApiLogicServer add-auth --project_name=. --db_url=postgresql://postgres:p@localhost/authdb", or...
+    echo "ApiLogicServer add-auth --project_name=. --db_url=authdb"
     echo "\nRebuild your image"
-    echo "\nThen, stop mysql-container\n"
+    echo "\nThen, stop mysql/postgres containers to avoid port conflicts with services\n"
     exit 1
 else
     echo "\n... security check complete\n"
@@ -74,7 +76,7 @@ az group create --name $resourcegroup --location "westus"
 az appservice plan create --name myAppServicePlan --resource-group $resourcegroup --sku S1 --is-linux
 
 # create docker compose app
-az webapp create --resource-group $resourcegroup --plan myAppServicePlan --name 1. instant_creation --multicontainer-config-type compose --multicontainer-config-file devops/docker-compose-dev-azure/docker-compose-dev-azure.yml
+az webapp create --resource-group $resourcegroup --plan myAppServicePlan --name 1. instantcreation --multicontainer-config-type compose --multicontainer-config-file devops/docker-compose-dev-azure/docker-compose-dev-azure.yml
 
 set +x # reset echo
 

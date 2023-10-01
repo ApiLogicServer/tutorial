@@ -12,7 +12,7 @@ version: "3.5"
 
 services:
     api-logic-server:
-        image: apilogicserver/1. instant_creation
+        image: apilogicserver/1. instantcreation
         # instead using a built image, uncomment the following to build the image dynamically
         # build:
         #     context: ../..
@@ -22,8 +22,10 @@ services:
           - APILOGICPROJECT_CLIENT_URI=//${HOST_IP}
           - SECURITY_ENABLED=true
           - PYTHONPATH=/app/ApiLogicProject 
-          ## TODO: specify Database uri's here, e.g.:
-          # - APILOGICPROJECT_SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:p@mysql-service:3306/classicmodels
+          ## TODO: verify Database uri's here, 
+          - APILOGICPROJECT_SQLALCHEMY_DATABASE_URI=postgresql://postgres:p@postgresql-service/nw-
+          - APILOGICPROJECT_SQLALCHEMY_DATABASE_URI_AUTHENTICATION=postgresql://postgres:p@postgresql-service/authdb
+          # - APILOGICPROJECT_SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:p@mysql-service:3306/nw-
           # - APILOGICPROJECT_SQLALCHEMY_DATABASE_URI_AUTHENTICATION=mysql+pymysql://root:p@mysql-service:3306/authdb
         expose:
             - 5000
@@ -47,6 +49,7 @@ services:
             - ./etc/ssl:/etc/ssl:ro
 
     mysql-service:
+        # TODO - specify your own database
         image: apilogicserver/mysql8.0:latest
         restart: always
         environment:
@@ -54,7 +57,7 @@ services:
             - MYSQL_PASSWORD=p
             - MYSQL_ROOT_PASSWORD=p
         ports:
-            # <Port exposed> : <MySQL Port running inside container>
+            # <Port exposed> : <MySQL Port running inside service container>
             - '3306:3306'
         expose:
             # Opens port 3306 on the container

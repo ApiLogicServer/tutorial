@@ -5,11 +5,11 @@
 #    edit this file: change your_account/your_repository as appropriate
 #    be sure to add security (already done for demo)
 
-#    in terminal (not in VSCode docker - docker is not installed there)
+#    in terminal
 #    $ cd <your project>
 #    $ sh devops/docker-image/build_image.sh .
 
-projectname="1. instant_creation"  # lower case, only
+projectname="1. instantcreation"  # lower case, only
 repositoryname="apilogicserver"
 version="1.0.0"
 

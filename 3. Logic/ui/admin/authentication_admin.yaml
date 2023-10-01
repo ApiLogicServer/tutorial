@@ -1,5 +1,5 @@
 about:
-  date: August 22, 2023 13:42:16
+  date: October 01, 2023 06:24:28
   recent_changes: works with modified safrs-react-admin
   version: 0.0.0
 api_root: '{http_type}://{swagger_host}:{port}/{api}'
@@ -9,7 +9,7 @@ info:
   number_relationships: 3
   number_tables: 4
 resources:
-  authentication-Api:
+  Api:
     attributes:
     - label: ' name*'
       name: name
@@ -23,10 +23,10 @@ resources:
       fks:
       - owner_id
       name: owner
-      resource: authentication-User
+      resource: User
     type: Api
     user_key: name
-  authentication-Role:
+  Role:
     attributes:
     - label: ' name*'
       name: name
@@ -38,10 +38,10 @@ resources:
       fks:
       - role_name
       name: UserRoleList
-      resource: authentication-UserRole
+      resource: UserRole
     type: Role
     user_key: name
-  authentication-User:
+  User:
     attributes:
     - label: ' name*'
       name: name
@@ -59,15 +59,15 @@ resources:
       fks:
       - owner_id
       name: ApiList
-      resource: authentication-Api
+      resource: Api
     - direction: tomany
       fks:
       - user_id
       name: UserRoleList
-      resource: authentication-UserRole
+      resource: UserRole
     type: User
     user_key: name
-  authentication-UserRole:
+  UserRole:
     attributes:
     - label: ' role_name*'
       name: role_name
@@ -84,12 +84,12 @@ resources:
       fks:
       - role_name
       name: Role
-      resource: authentication-Role
+      resource: Role
     - direction: toone
       fks:
       - user_id
       name: user
-      resource: authentication-User
+      resource: User
     type: UserRole
     user_key: role_name
 settings:
