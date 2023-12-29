@@ -1,5 +1,5 @@
 about:
-  date: October 01, 2023 06:24:28
+  date: December 29, 2023 15:39:34
   recent_changes: works with modified safrs-react-admin
   version: 0.0.0
 api_root: '{http_type}://{swagger_host}:{port}/{api}'
@@ -9,7 +9,7 @@ info:
   number_relationships: 3
   number_tables: 4
 resources:
-  Api:
+  authentication-Api:
     attributes:
     - label: ' name*'
       name: name
@@ -23,10 +23,10 @@ resources:
       fks:
       - owner_id
       name: owner
-      resource: User
-    type: Api
+      resource: authentication-User
+    type: authentication-Api
     user_key: name
-  Role:
+  authentication-Role:
     attributes:
     - label: ' name*'
       name: name
@@ -38,19 +38,18 @@ resources:
       fks:
       - role_name
       name: UserRoleList
-      resource: UserRole
-    type: Role
+      resource: authentication-UserRole
+    type: authentication-Role
     user_key: name
-  User:
+  authentication-User:
     attributes:
     - label: ' name*'
       name: name
       search: true
       sort: true
-    - name: notes
     - name: username
-    - name: email
     - name: password_hash
+    - name: region
     - name: client_id
     - name: id
       required: true
@@ -59,15 +58,15 @@ resources:
       fks:
       - owner_id
       name: ApiList
-      resource: Api
+      resource: authentication-Api
     - direction: tomany
       fks:
       - user_id
       name: UserRoleList
-      resource: UserRole
-    type: User
+      resource: authentication-UserRole
+    type: authentication-User
     user_key: name
-  UserRole:
+  authentication-UserRole:
     attributes:
     - label: ' role_name*'
       name: role_name
@@ -84,13 +83,13 @@ resources:
       fks:
       - role_name
       name: Role
-      resource: Role
+      resource: authentication-Role
     - direction: toone
       fks:
       - user_id
       name: user
-      resource: User
-    type: UserRole
+      resource: authentication-User
+    type: authentication-UserRole
     user_key: role_name
 settings:
   HomeJS: http://localhost:5656/admin-app/home.js

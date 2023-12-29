@@ -12,7 +12,12 @@ from safrs import jsonapi_rpc, SAFRSAPI
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import object_mapper
 from database import models
+from config import Args
+from flask_cors import cross_origin
 from logic_bank.rule_bank.rule_bank import RuleBank
+from integration.row_dict_maps.OrderById import OrderById
+from integration.row_dict_maps.OrderShipping import OrderShipping
+from integration.row_dict_maps.OrderB2B import OrderB2B
 
 # Customize this file to add endpoints/services, using SQLAlchemy as required
 #     Separate from expose_api_models.py, to simplify merge if project rebuilt
@@ -22,24 +27,37 @@ app_logger = logging.getLogger("api_logic_server_app")  # only for create-and-ru
 
 def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
     """ 
-    Illustrates Customized APIs, Data Access.
+    #### Illustrates Customized APIs and Data Access.
 
-    * Observe that APIs not limited to database objects, but are extensible.
-    * See: https://apilogicserver.github.io/Docs/API-Customize/
-    * See: https://github.com/thomaxxl/safrs/wiki/Customization
+    1. Observe that APIs not limited to database objects, but are extensible.
+    2. See: https://apilogicserver.github.io/Docs/Sample-Integration/
+    3. See: https://apilogicserver.github.io/Docs/API-Customize/
+    4. See: https://github.com/thomaxxl/safrs/wiki/Customization
 
-    Examples
+    
+    #### Illustrate Reusable Integration Services
 
-    * order_nested_objects() - 
-            * Uses util.format_nested_objects() (-> jsonify(row).json)
+    1. ServicesEndPoint OrderB2B() - 
+            * Illustrates: Reusable IntegrationServices to POST order
 
-    * CategoriesEndPoint get_cats() - swagger, row security
+    2. OrderShipping_Test() - 
+            * Illustrates: SQLAlchemy related row retrieval, reformat as multi-table dict and convert to json
+
+    #### Illustrate Using Flask and SQLAlchemy
+
+    1. order_nested_objects() - 
+            * Illustrates: Uses util.format_nested_objects() (-> jsonify(row).json)
+
+    2. join_order() - 
+            * Illustrates: SQLAlchemy parent join fields
+
+    3. CategoriesEndPoint get_cats() - swagger, row security
             * Uses util.rows_to_dict            (-> row.to_dict())
 
-    * filters_cats() - model query with filters
+    4. filters_cats() - model query with filters
             * Uses manual result creation (not util)
 
-    * raw_sql_cats() - raw sql (non-modeled objects)
+    5. raw_sql_cats() - raw sql (non-modeled objects)
             * Uses util.rows_to_dict            (-> iterate attributes)
     
     """
@@ -65,30 +83,11 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         return jsonify({"result": f'hello, {user}'})
 
 
-    @app.route('/stop')
-    def stop():
-        """
-        Use this to stop the server from the Browser.
-        * See: https://stackoverflow.com/questions/15562446/how-to-stop-flask-application-without-using-ctrl-c
-        * See: https://github.com/thomaxxl/safrs/wiki/Customization
-
-        Usage:
-
-                http://localhost:5656/stop?msg=API stop - Stop API Logic Server
-        """
-
-        import os, signal
-
-        msg = request.args.get('msg')
-        app_logger.info(f'\nStopped server: {msg}\n')
-
-        os.kill(os.getpid(), signal.SIGINT)
-        return jsonify({ "success": True, "message": "Server is shutting down..." })
-
-
     def bypass_security():
         """
         Support option to bypass security (see cats, below).
+
+        See: https://flask-jwt-extended.readthedocs.io/en/stable/custom_decorators/
         """
         def wrapper(fn):
             @wraps(fn)
@@ -99,6 +98,85 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
                 return fn(*args, **kwargs)
             return decorator
         return wrapper
+
+  
+    def admin_required():
+        """
+        Support option to bypass security (see cats, below).
+        """
+        def wrapper(fn):
+            @wraps(fn)
+            def decorator(*args, **kwargs):
+                if Args.security_enabled == False:
+                    return fn(*args, **kwargs)
+                verify_jwt_in_request(True)  # must be issued if security enabled
+                return fn(*args, **kwargs)
+            return decorator
+        return wrapper
+
+
+    @app.route('/OrderShipping_Test', methods=['GET','OPTIONS'])
+    @admin_required()
+    @jwt_required()
+    @cross_origin(supports_credentials=True)
+    def OrderShipping_Test():
+        """ 
+        Illustrates
+        
+        1. SQLAlchemy row retrieval
+        
+        2. IntegationService to reformat row as multi-table dict, and then json
+
+        $(venv) ApiLogicServer login --user=admin --password=p
+        $(venv) ApiLogicServer curl "http://localhost:5656/OrderShipping_Test?id=10643"
+
+        """
+        request_id = request.args.get('id')
+        if request_id is None:
+            request_id = 10643
+        db = safrs.DB           # Use the safrs.DB, not db!
+        session = db.session    # sqlalchemy.orm.scoping.scoped_session
+        Security.set_user_sa()  # an endpoint that requires no auth header (see also @bypass_security)
+        the_order : models.Order = session.query(models.Order) \
+                .filter(models.Order.Id == request_id).one()
+        
+        order_def = OrderShipping()
+        dict_row = order_def.row_to_dict(row = the_order)
+        return jsonify({"OrderShipping_Test with Items and Product":  dict_row})
+
+
+    #########################################################
+    # Illustrate using SQLAlchemy in standard Flask endpoints
+    #########################################################
+
+    @app.route('/join_order')
+    @bypass_security()
+    def join_order():
+        """
+        Illustrates: SQLAlchemy join fields, by manual code
+
+        Better: use IntegrationService (next example)
+
+        $(venv) ApiLogicServer curl "http://localhost:5656/join_order?id=11077"
+
+        Returns:
+            _type_: _description_
+        """
+
+        request_id = request.args.get('id')
+        if request_id is None:
+            request_id = 11078
+        db = safrs.DB           # Use the safrs.DB, not db!
+        session = db.session    # sqlalchemy.orm.scoping.scoped_session
+        Security.set_user_sa()  # an endpoint that requires no auth header (see also @bypass_security)
+        the_order : models.Order = session.query(models.Order) \
+                .filter(models.Order.Id == request_id).one()
+        
+        dict_row = {}
+        dict_row["id"] = the_order.Id
+        dict_row["AmountTotal"] = the_order.AmountTotal
+        dict_row["SalesRepLastName"] = the_order.Employee.LastName
+        return jsonify({"order_with_join_attr":  dict_row})
 
 
     @app.route('/filters_cats')
@@ -194,10 +272,14 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         return result_std_dict
 
 
+    ###################
+    # Internal Services
+    ###################
+
     @app.route('/server_log')
     def server_log():
         """
-        Used by test/*.py - enables client app to log msg into server
+        Used by test/*.py - enables client app to log msg into server's console log
         """
         return util.server_log(request, jsonify)
 
@@ -258,13 +340,125 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         return_result = {"resources": resource_objs}
         return jsonify(return_result)
 
+    @app.route('/stop')
+    def stop():
+        """
+        Use this to stop the server from the Browser.
+        * See: https://stackoverflow.com/questions/15562446/how-to-stop-flask-application-without-using-ctrl-c
+        * See: https://github.com/thomaxxl/safrs/wiki/Customization
+
+        Usage:
+
+                http://localhost:5656/stop?msg=API stop - Stop API Logic Server
+        """
+
+        import os, signal
+
+        msg = request.args.get('msg')
+        app_logger.info(f'\nStopped server: {msg}\n')
+
+        os.kill(os.getpid(), signal.SIGINT)
+        return jsonify({ "success": True, "message": "Server is shutting down..." })
+
 
 class ServicesEndPoint(safrs.JABase):
     """
     Illustrates
     * Custom service - visible in swagger
-    * Quite small, since leverages logic/declare_logic rules
+    * Services *not* requiring authentication (contrast to CategoriesEndPoint, below)
+    * Recall business logic is not in service, but encapsulated for reuse in logic/declare_logic.py
     """
+
+
+    @classmethod
+    @jsonapi_rpc(http_methods=["POST"])
+    def OrderB2B(self, *args, **kwargs):  # yaml comment => swagger description
+        """ # yaml creates Swagger description
+            args :
+                order:
+                    AccountId: "ALFKI"
+                    Given: "Steven"
+                    Surname: "Buchanan"
+                    Items :
+                    - ProductName: "Chai"
+                      QuantityOrdered: 1
+                    - ProductName: "Chang"
+                      QuantityOrdered: 2
+            ---
+
+        Note attribute alias, Lookup automation in OrderB2B
+
+        See: https://apilogicserver.github.io/Docs/Sample-Integration/
+        Test with swagger, or, from command line:
+
+        $(venv) ApiLogicServer login --user=admin --password=p
+        $(venv) ApiLogicServer curl "'POST' 'http://localhost:5656/api/ServicesEndPoint/OrderB2B'" --data '
+        {"meta": {"args": {"order": {
+            "AccountId": "ALFKI",
+            "Surname": "Buchanan",
+            "Given": "Steven",
+            "Items": [
+                {
+                "ProductName": "Chai",
+                "QuantityOrdered": 1
+                },
+                {
+                "ProductName": "Chang",
+                "QuantityOrdered": 2
+                }
+                ]
+            }
+        }}}'
+
+        """
+
+        db = safrs.DB         # Use the safrs.DB, not db!
+        session = db.session  # sqlalchemy.orm.scoping.scoped_session
+
+        order_b2b_def = OrderB2B()
+        request_dict_data = request.json["meta"]["args"]["order"]
+        sql_alchemy_row = order_b2b_def.dict_to_row(row_dict = request_dict_data, session = session)
+
+        session.add(sql_alchemy_row)
+        return {"Thankyou For Your OrderB2B"}  # automatic commit, which executes transaction logic
+    
+
+    #################################################################################
+    # The example above is a best practice,
+    #   using the OrderB2B object for mapping, alias, and lookup IntegrationServices.
+    #
+    # Contrast to the discouraged examples below
+    #################################################################################
+    
+    @classmethod
+    @jsonapi_rpc(http_methods=["POST"])
+    def add_order_by_id(self, *args, **kwargs):  # yaml comment => swagger description
+        """ # yaml creates Swagger description
+            args:
+                order :
+                    AccountId: ALFKI
+                    SalesRepId: 1
+                    Items :
+                    - ProductId: 1
+                      QuantityOrdered: 1
+                    - ProductId: 2
+                      QuantityOrdered: 2
+            ---
+
+            Best Practice: use OrderB2B for automated map/alias, Lookups etc.
+              eg, how would a B2B partner determine a SalesRepId or a ProductId?
+            Test using swagger -> try it out (includes sample data, above)
+        """
+
+        db = safrs.DB         # Use the safrs.DB, not db!
+        session = db.session  # sqlalchemy.orm.scoping.scoped_session
+
+        order_id_def = OrderById()
+        request_dict_data = request.json["meta"]["args"]["order"]
+        sql_alchemy_row = order_id_def.dict_to_row(row_dict = request_dict_data, session = session)
+
+        session.add(sql_alchemy_row)
+        return {"Thankyou For Your OrderById"}  # automatic commit, which executes transaction logic
 
     @classmethod
     @jsonapi_rpc(http_methods=["POST"])
@@ -281,9 +475,11 @@ class ServicesEndPoint(safrs.JABase):
                   - ProductId: 2
                     Quantity: 2
                     Discount: 0
-        """
+            ---
 
-        # test using swagger -> try it out (includes sample data, above)
+            Best Practice: use OrderB2B for automated map/alias, Lookups etc.
+            Test using swagger -> try it out (includes sample data, above)
+        """
 
         db = safrs.DB         # Use the safrs.DB, not db!
         session = db.session  # sqlalchemy.orm.scoping.scoped_session
@@ -292,6 +488,7 @@ class ServicesEndPoint(safrs.JABase):
 
         util.json_to_entities(kwargs, new_order)  # generic function - any db object
         return {"Thankyou For Your Order"}  # automatic commit, which executes transaction logic
+
 
 
 class CategoriesEndPoint(safrs.JABase):

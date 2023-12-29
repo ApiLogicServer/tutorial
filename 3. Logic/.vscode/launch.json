@@ -15,7 +15,7 @@
             "program": "api_logic_server_run.py",
             "redirectOutput": true,
             "justMyCode": false,
-            "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=False"],
+            "args": ["--flask_host=localhost", "--port=5656", "--swagger_port=5656", "--swagger_host=localhost", "--verbose=False"],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart"
         },
@@ -31,7 +31,7 @@
                 "PYTHONHASHSEED": "0", 
                 "OPT_LOCKING": "optional"},
             "justMyCode": false,
-            "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=False"],
+            "args": ["--flask_host=localhost", "--port=5656", "--swagger_port=5656", "--swagger_host=localhost", "--verbose=False"],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart"
         },
@@ -48,7 +48,7 @@
                 "OPT_LOCKING": "optional",
                 "APILOGICPROJECT_VERBOSE": "True"},
             "justMyCode": false,
-            "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=False"],
+            "args": ["--flask_host=localhost", "--port=5656", "--swagger_port=5656", "--swagger_host=localhost", "--verbose=False"],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart"
         },
@@ -142,7 +142,7 @@
             "program": "api_logic_server_run.py",
             "redirectOutput": true,
             "justMyCode": false,
-            "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=False"],
+            "args": ["--flask_host=localhost", "--port=5656", "--swagger_port=5656", "--swagger_host=localhost", "--verbose=False"],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart"
         },
@@ -178,8 +178,7 @@
             "name": "db-debug - explore SQLAlchemy",
             "type": "python",
             "request": "launch",
-            "cwd": "${workspaceFolder}/test/api_logic_server_behave",
-            "program": "${workspaceFolder}/database/db_debug.py",
+            "program": "${workspaceFolder}/database/db_debug/db_debug.py",
             "redirectOutput": true,
             "justMyCode": false,            
             "console": "internalConsole",
@@ -193,7 +192,7 @@
             "redirectOutput": true,
             "env": {"PYTHONPATH": "", "SECURITY_ENABLED": "False", "PYTHONHASHSEED": "0", "OPT_LOCKING": "optional"},
             "justMyCode": false,
-            "args": ["--flask_host=localhost", "--port=5656", "--swagger_host=localhost", "--verbose=True"],
+            "args": ["--flask_host=localhost", "--port=5656", "--swagger_port=5656", "--swagger_host=localhost", "--verbose=True"],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart"
         }

@@ -7,9 +7,17 @@ This is the _no-customizations_ version of the Northwind Sample project.  It ena
 
 To introduce customizations, use the terminal and run:
 
-```
+```bash
 ApiLogicServer add-cust
 ```
+
+You can add functionality to your project:
+```bash
+ApiLogicServer add-db --bind_key=Todo --db_url=todo
+ApiLogicServer add-auth --db_url=auth
+ApiLogicServer rebuild-from-database --db_url=
+```
+
 
 &nbsp;&nbsp;
 
@@ -44,9 +52,9 @@ python api_logic_server_run.py
 
 | About                    | Info                               |
 |:-------------------------|:-----------------------------------|
-| Created                  | October 01, 2023 06:24:27                      |
-| API Logic Server Version | 09.04.00           |
-| Created in directory     | /Users/val/dev/ApiLogicServer/ApiLogicServer-dev/org_git/tutorial/1. Instant_Creation |
+| Created                  | December 29, 2023 15:39:33                      |
+| API Logic Server Version | 10.00.08           |
+| Created in directory     | /Users/val/dev/ApiLogicServer/ApiLogicServer-dev/build_and_test/ApiLogicServer/tutorial/1. Instant_Creation |
 | API Name                 | api          |
 
 &nbsp;&nbsp;

@@ -9,8 +9,8 @@ from sqlalchemy.ext.declarative import declarative_base
 # Alter this file per your database maintenance policy
 #    See https://apilogicserver.github.io/Docs/Project-Rebuild/#rebuilding
 #
-# Created:  October 01, 2023 06:24:28
-# Database: sqlite:////Users/val/dev/ApiLogicServer/ApiLogicServer-dev/org_git/tutorial/1. Instant_Creation/database/db.sqlite
+# Created:  December 29, 2023 15:39:33
+# Database: sqlite:////Users/val/dev/ApiLogicServer/ApiLogicServer-dev/build_and_test/ApiLogicServer/tutorial/1. Instant_Creation/database/db.sqlite
 # Dialect:  sqlite
 #
 # mypy: ignore-errors
@@ -139,6 +139,7 @@ class Department(SAFRSBase, Base):
     Id = Column(Integer, primary_key=True)
     DepartmentId = Column(ForeignKey('Department.Id'))
     DepartmentName = Column(String(100))
+    SecurityLevel = Column(Integer, server_default=text("0"))
 
     # parent relationships (access parent)
     Department : Mapped["Department"] = relationship(remote_side=[Id], back_populates=("DepartmentList"))

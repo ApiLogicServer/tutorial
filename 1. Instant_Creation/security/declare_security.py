@@ -1,4 +1,4 @@
-from security.system.authorization import Grant, Security
+from security.system.authorization import Grant, Security, Security, DefaultRolePermission, GlobalFilter
 import logging
 from database import models
 import safrs
@@ -12,18 +12,9 @@ app_logger = logging.getLogger(__name__)
 
 First, Activate Security: https://apilogicserver.github.io/Docs/Security-Activation/
 
-Then, Declare Security here, for example:
+Then, Declare Security here: https://apilogicserver.github.io/Docs/Security-Authorization/
 
-class Roles():
-    ''' Define Roles here, so can use code completion (Roles.tenant) '''
-    tenant = "tenant"
-    renter = "renter"
-
-Grant(  on_entity = models.Category,    # illustrate multi-tenant
-        to_role = Roles.tenant,
-        filter = lambda : models.Category.Client_id == Security.current_user().client_id)  # User table attributes
-
-See [documentation](https://apilogicserver.github.io/Docs/Security-Overview/)
+See documentation: https://apilogicserver.github.io/Docs/Security-Overview/
 
 Security is invoked on server start (api_logic_server_run), per activation in `config.py`
 """
