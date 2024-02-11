@@ -1,17 +1,113 @@
 from database import models
 from flask import request, jsonify
+import sqlalchemy as sqlalchemy
 from sqlalchemy import Column
 from sqlalchemy.ext.declarative import declarative_base
 from flask_sqlalchemy.model import DefaultMeta
+from sqlalchemy.ext.hybrid import hybrid_property
+import flask_sqlalchemy
+from typing import Any, Optional, Tuple
+from sqlalchemy.orm import object_mapper
 from typing_extensions import Self  # from typing import Self  # requires python 3.11
 import logging
 
 logger = logging.getLogger('integration.kafka')
 
-class RowDictMapper():
-    """Services to support App Integration as described in api.custom_resources.readme
 
-    See: https://apilogicserver.github.io/Docs/Sample-Integration/
+def json_to_entities(from_row: str or object, to_row):
+    """
+    Transform json object to SQLAlchemy rows, for save & logic
+
+    This and rows_to_dict() do not provide attribute renaming, joins or lookups.
+    * In most cases, extend RowDictMapper, which provides these services.
+    * See: https://apilogicserver.github.io/Docs/Integration-Map/
+    * And: https://apilogicserver.github.io/Docs/Sample-Integration/
+
+    :param from_row: json service payload: dict - e.g., Order and OrderDetailsList
+    :param to_row: instantiated mapped object (e.g., Order)
+    :return: updates to_row with contents of from_row (recursively for lists)
+    """
+
+    def get_attr_name(mapper, attr)-> Tuple[Optional[Any], str]:
+        """ returns name, type of SQLAlchemy attr metadata object """
+        attr_name = None
+        attr_type = "attr"
+        if hasattr(attr, "key"):
+            attr_name = attr.key
+        elif isinstance(attr, hybrid_property):
+            attr_name = attr.__name__
+        elif hasattr(attr, "__name__"):
+            attr_name = attr.__name__
+        elif hasattr(attr, "name"):
+            attr_name = attr.name
+        if attr_name == "OrderDetailListX" or attr_name == "CustomerX":
+            print("Debug Stop")
+        if isinstance(attr, sqlalchemy.orm.relationships.RelationshipProperty):   # hasattr(attr, "impl"):   # sqlalchemy.orm.relationships.RelationshipProperty
+            if attr.uselist:
+                attr_type = "list"
+            else: # if isinstance(attr.impl, sqlalchemy.orm.attributes.ScalarObjectAttributeImpl):
+                attr_type = "object"
+        return attr_name, attr_type
+
+    row_mapper = object_mapper(to_row)
+    for each_attr_name in from_row:
+        if hasattr(to_row, each_attr_name):
+            for each_attr in row_mapper.attrs:
+                mapped_attr_name, mapped_attr_type = get_attr_name(row_mapper, each_attr)
+                if mapped_attr_name == each_attr_name:
+                    if mapped_attr_type == "attr":
+                        value = from_row[each_attr_name]
+                        setattr(to_row, each_attr_name, value)
+                    elif mapped_attr_type == "list":
+                        child_from = from_row[each_attr_name]
+                        for each_child_from in child_from:
+                            child_class = each_attr.entity.class_
+                            # eachOrderDetail = OrderDetail(); order.OrderDetailList.append(eachOrderDetail)
+                            child_to = child_class()  # instance of child (e.g., OrderDetail)
+                            json_to_entities(each_child_from, child_to)
+                            child_list = getattr(to_row, each_attr_name)
+                            child_list.append(child_to)
+                            pass
+                    elif mapped_attr_type == "object":
+                        logger.debug("a parent object - skip (future - lookups here?)")
+                    break
+
+
+def rows_to_dict(result: flask_sqlalchemy.BaseQuery) -> list:
+    """
+    Converts SQLAlchemy result (mapped or raw) to dict array of un-nested rows
+
+    This does not provide attribute renaming, joins or lookups.
+    * In most cases, extend RowDictMapper, which provides these services.
+    * See: https://apilogicserver.github.io/Docs/Integration-Map/
+    * And: https://apilogicserver.github.io/Docs/Sample-Integration/
+
+    Args:
+        result (object): query result
+
+    Returns:
+        list of rows as dicts
+    """
+    rows = []
+    for each_row in result:
+        row_as_dict = {}
+        logger.debug(f'type(each_row): {type(each_row)}')
+        if isinstance (each_row, sqlalchemy.engine.row.Row):  # raw sql, eg, sample catsql
+            key_to_index = each_row._key_to_index             # note: SQLAlchemy 2 specific
+            for name, value in key_to_index.items():
+                row_as_dict[name] = each_row[value]
+        else:
+            row_as_dict = each_row.to_dict()                  # safrs helper
+        rows.append(row_as_dict)
+    return rows
+
+
+class RowDictMapper():
+    """
+    Services to support App Integration -- Column renames, Joins, Foreign Keys Lookups, etc.
+
+    * See: https://apilogicserver.github.io/Docs/Integration-Map/
+    * And: https://apilogicserver.github.io/Docs/Sample-Integration/
 
     """
 
@@ -30,7 +126,8 @@ class RowDictMapper():
 
         Declare a user shaped dict based on a SQLAlchemy model class.
 
-        See: https://apilogicserver.github.io/Docs/Sample-Integration/
+        * See: https://apilogicserver.github.io/Docs/Integration-Map/
+        * And: https://apilogicserver.github.io/Docs/Sample-Integration/
 
         Args:
             :model_class (DeclarativeMeta | None): model.Class
@@ -97,7 +194,7 @@ class RowDictMapper():
         for each_related in custom_endpoint_related_list:
             child_property_name = each_related.role_name
             if child_property_name == '':
-                child_property_name = "OrderList"  # FIXME default from class name
+                child_property_name = "OrderList"  # TODO default from class name
             if child_property_name.startswith('Product'):
                 debug = 'good breakpoint'
             row_dict_child_list = getattr(row, child_property_name)
@@ -132,12 +229,16 @@ class RowDictMapper():
         logger.debug( f"RowDictMapper.dict_to_row(): {str(self)}" )
         logger.debug( f"  ..row_dict: {row_dict}" )
 
-        custom_endpoint = self  # FIXME just use self
+        custom_endpoint = self  # TODO just use self
         if current_endpoint is not None:
             custom_endpoint = current_endpoint
         sql_alchemy_row = custom_endpoint._model_class()     # new instance
-        error_count = 0                                     # FIXME - dates fail in sqlite
-        for each_field in custom_endpoint.fields:           # attr mapping  FIXME 1 field, not array
+        error_count = 0                                     # TODO - dates fail in sqlite
+        fields = custom_endpoint.fields
+        if not isinstance(fields, list):
+            fields_list = []
+            fields = fields_list.append(fields)
+        for each_field in fields:
             if isinstance(each_field, tuple):
                 try:
                     setattr(sql_alchemy_row, each_field[0].name, row_dict[each_field[1]])

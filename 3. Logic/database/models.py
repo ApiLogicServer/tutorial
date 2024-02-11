@@ -9,8 +9,8 @@ from sqlalchemy.ext.declarative import declarative_base
 # Alter this file per your database maintenance policy
 #    See https://apilogicserver.github.io/Docs/Project-Rebuild/#rebuilding
 #
-# Created:  December 29, 2023 15:39:33
-# Database: sqlite:////Users/val/dev/ApiLogicServer/ApiLogicServer-dev/build_and_test/ApiLogicServer/tutorial/1. Instant_Creation/database/db.sqlite
+# Created:  February 11, 2024 12:12:18
+# Database: sqlite:////Users/val/dev/ApiLogicServer/ApiLogicServer-dev/org_git/tutorial/1. Instant_Creation/database/db.sqlite
 # Dialect:  sqlite
 #
 # mypy: ignore-errors

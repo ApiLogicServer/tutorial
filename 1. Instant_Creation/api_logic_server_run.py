@@ -2,7 +2,7 @@
 
 ###############################################################################
 #
-#    This file initializes and starts the API Logic Server (v 10.00.08, December 29, 2023 15:39:33):
+#    This file initializes and starts the API Logic Server (v 10.02.02, February 11, 2024 12:12:18):
 #        $ python3 api_logic_server_run.py [--help]
 #
 #    Then, access the Admin App and API via the Browser, eg:  
@@ -32,7 +32,7 @@ except:
 from flask_sqlalchemy import SQLAlchemy
 import json
 from pathlib import Path
-from config import Args
+from config.config import Args
 
 def is_docker() -> bool:
     """ running docker?  dir exists: /home/api_logic_server """
@@ -48,9 +48,14 @@ sys.path.append(current_path)
 if is_docker():
     sys.path.append(os.path.abspath('/home/api_logic_server'))
 
+logic_alerts = True
+""" Set False to silence startup message """
+declare_logic_message = ""
+declare_security_message = "ALERT:  *** Security Not Enabled ***"
+
 project_dir = str(current_path)
 os.chdir(project_dir)  # so admin app can find images, code
-import util as util
+import api.system.api_utils as api_utils
 logic_logger_activate_debug = False
 """ True prints all rules on startup """
 
@@ -107,7 +112,7 @@ class SAFRSAPI(_SAFRSAPI):
 # ================================== 
 
 current_path = os.path.abspath(os.path.dirname(__file__))
-with open(f'{current_path}/logging.yml','rt') as f:  # see also logic/declare_logic.py
+with open(f'{current_path}/config/logging.yml','rt') as f:  # see also logic/declare_logic.py
         config=yaml.safe_load(f.read())
         f.close()
 logging.config.dictConfig(config)  # log levels: notset 0, debug 10, info 20, warn 30, error 40, critical 50
@@ -121,7 +126,7 @@ if debug_value is not None:  # > export APILOGICPROJECT_DEBUG=True
         app_logger.setLevel(logging.DEBUG)
         app_logger.debug(f'\nDEBUG level set from env\n')
 app_logger.info(f'\nAPI Logic Project ({project_name}) Starting with CLI args: \n.. {args}\n')
-app_logger.info(f'Created December 29, 2023 15:39:33 at {str(current_path)}\n')
+app_logger.info(f'Created February 11, 2024 12:12:18 at {str(current_path)}\n')
 
 
 class ValidationErrorExt(ValidationError):
@@ -196,7 +201,7 @@ def api_logic_server_setup(flask_app: Flask, args: Args):
 
     from sqlalchemy import exc as sa_exc
 
-    global logic_logger_activate_debug
+    global logic_logger_activate_debug, declare_logic_message, declare_security_message
 
     with warnings.catch_warnings():
 
@@ -260,6 +265,7 @@ def api_logic_server_setup(flask_app: Flask, args: Args):
             from database import customize_models
 
             from logic import declare_logic
+            declare_logic_message = declare_logic.declare_logic_message
             logic_logger = logging.getLogger('logic_logger')
             logic_logger_level = logic_logger.getEffectiveLevel()
             if logic_logger_activate_debug == False:
@@ -286,9 +292,10 @@ def api_logic_server_setup(flask_app: Flask, args: Args):
                 app_logger.info("..declare security - security/declare_security.py"
                     # not accurate: + f' -- {len(database.authentication_models.metadata.tables)}'
                     + ' authentication tables loaded')
+                declare_security_message = declare_security.declare_security_message
 
             from api.system.opt_locking import opt_locking
-            from config import OptLocking
+            from config.config import OptLocking
             if args.opt_locking == OptLocking.IGNORED.value:
                 app_logger.info("\nOptimistic Locking: ignored")
             else:
@@ -319,7 +326,8 @@ CORS(flask_app, resources=[{r"/api/*": {"origins": "*"}}],
 
 args = Args(flask_app=flask_app)                                # creation defaults
 
-flask_app.config.from_object("config.Config")
+import config.config as config
+flask_app.config.from_object(config.Config)
 app_logger.debug(f"\nConfig args: \n{args}")                    # config file (e.g., db uri's)
 
 args.get_cli_args(dunder_name=__name__, args=args)
@@ -341,7 +349,7 @@ if args.verbose:
     # sqlachemy_logger.setLevel(logging.DEBUG)
 
 if app_logger.getEffectiveLevel() <= logging.DEBUG:
-    util.sys_info(flask_app.config)
+    api_utils.sys_info(flask_app.config)
 app_logger.debug(f"\nENV args: \n{args}\n\n")
 validate_db_uri(flask_app)
 
@@ -350,7 +358,7 @@ api_logic_server_setup(flask_app, args)
 AdminLoader.admin_events(flask_app = flask_app, args = args, validation_error = ValidationError)
 
 if __name__ == "__main__":
-    msg = f'API Logic Project loaded (not WSGI), version 10.00.08\n'
+    msg = f'API Logic Project loaded (not WSGI), version 10.02.02\n'
     msg += f'.. startup message: {start_up_message}\n'
     if is_docker():
         msg += f' (running from docker container at flask_host: {args.flask_host} - may require refresh)\n'
@@ -370,10 +378,14 @@ if __name__ == "__main__":
                 f'..Explore data and API at http_scheme://swagger_host:port {args.http_scheme}://{args.swagger_host}:{args.port}\n'
                 f'.... with flask_host: {args.flask_host}\n'
                 f'.... and  swagger_port: {args.swagger_port}')
+    if logic_alerts:
+        app_logger.info(f'\nOpen {args.http_scheme}://{args.swagger_host}:{args.port}   -- Alert: These following are **Critical** to unlocking value')
+        app_logger.info(f'.. see logic.declare_logic.py       -- {declare_logic_message}')
+        app_logger.info(f'.. see security.declare_security.py -- {declare_security_message}\n')
 
     flask_app.run(host=args.flask_host, threaded=True, port=args.port)
 else:
-    msg = f'API Logic Project Loaded (WSGI), version 10.00.08\n'
+    msg = f'API Logic Project Loaded (WSGI), version 10.02.02\n'
     msg += f'.. startup message: {start_up_message}\n'
 
     if is_docker():

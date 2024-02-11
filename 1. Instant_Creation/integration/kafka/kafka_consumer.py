@@ -6,7 +6,7 @@ Listen/consume Kafka topis, if KAFKA_CONSUMER specified in Config.py
 Alter this file to add handlers for consuming kafka topics
 """
 
-from config import Args
+from config.config import Args
 from confluent_kafka import Producer, KafkaException, Consumer
 import signal
 import logging
@@ -45,11 +45,16 @@ def kafka_consumer(safrs_api: safrs.SAFRSAPI = None):
 
     bus = FlaskKafka(interrupt_event=INTERRUPT_EVENT, conf=conf, safrs_api=safrs_api)
     
-    bus.run()
+    bus.run()  # Kafka consumption, threading, handler annotations
 
     logger.debug(f'Kafka Listener thread activated {bus}')
 
-    ###
-    # Define topic handlers here
-    ###
+    '''   Your Code Goes Here
+    
+    Define topic handlers here, e.g.
+
+    @bus.handle('order_shipping')
+    def order_shipping(msg: object, safrs_api: safrs.SAFRSAPI):
+
+    '''
 

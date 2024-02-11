@@ -10,12 +10,14 @@ import logging
 
 app_logger = logging.getLogger(__name__)
 
-def declare_logic():
-    ''' Declarative multi-table derivations and constraints, extensible with Python. 
+declare_logic_message = "ALERT:  *** No Rules Yet ***"  # printed in api_logic_server.py
 
+def declare_logic():
+    ''' Declarative multi-table derivations and constraints, extensible with Python.
+ 
     Brief background: see readme_declare_logic.md
     
-    Use code completion (Rule.) to declare rules here:
+    Your Code Goes Here - Use code completion (Rule.) to declare rules
     '''
 
     def handle_all(logic_row: LogicRow):  # OPTIMISTIC LOCKING, [TIME / DATE STAMPING]

@@ -9,9 +9,12 @@ from enum import Enum
 import socket
 import json
 
-#  for complete flask_sqlachemy config parameters and session handling,
-#  read: file flask_sqlalchemy/__init__.py AND flask/config.py
 '''
+#als: configuration settings
+
+For complete flask_sqlachemy config parameters and session handling,
+  see: file flask_sqlalchemy/__init__.py AND flask/config.py
+
 app.config.setdefault('SQLALCHEMY_DATABASE_URI', 'sqlite:///:memory:')
 app.config.setdefault('SQLALCHEMY_BINDS', None)
 app.config.setdefault('SQLALCHEMY_NATIVE_UNICODE', None)
@@ -101,7 +104,7 @@ class Config:
         SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
         app_logger.debug(f'.. overridden from env variable: {SQLALCHEMY_DATABASE_URI}')
 
-    SECURITY_ENABLED = False  # you must also: ApiLogicServer add-db --db_url=auth --bind_key=authentication
+    SECURITY_ENABLED = True  # you must also: ApiLogicServer add-db --db_url=auth --bind_key=authentication
     SECURITY_PROVIDER = None
     if os.getenv('SECURITY_ENABLED'):  # e.g. export SECURITY_ENABLED=true
         security_export = os.getenv('SECURITY_ENABLED')  # type: ignore # type: str
@@ -120,7 +123,16 @@ class Config:
 
     # Begin Multi-Database URLs (from ApiLogicServer add-db...)
 
-    # End Multi-Database URLs (from ApiLogicServer add-db...)
+
+    SQLALCHEMY_DATABASE_URI_AUTHENTICATION = 'sqlite:///../database/authentication_db.sqlite'
+    app_logger.info(f'config.py - SQLALCHEMY_DATABASE_URI_AUTHENTICATION: {SQLALCHEMY_DATABASE_URI_AUTHENTICATION}\n')
+
+    # as desired, use env variable: export SQLALCHEMY_DATABASE_URI='sqlite:////Users/val/dev/servers/docker_api_logic_project/database/db.sqliteXX'
+    if os.getenv('SQLALCHEMY_DATABASE_URI_AUTHENTICATION'):
+        SQLALCHEMY_DATABASE_URI_AUTHENTICATION = os.getenv('SQLALCHEMY_DATABASE_URI_AUTHENTICATION')  # type: ignore # type: str
+        app_logger.debug(f'.. overridden from env variable: SQLALCHEMY_DATABASE_URI_AUTHENTICATION')
+
+        # End Multi-Database URLs (from ApiLogicServer add-db...)
 
     # SQLALCHEMY_ECHO = environ.get("SQLALCHEMY_ECHO")
     SQLALCHEMY_TRACK_MODIFICATIONS = False

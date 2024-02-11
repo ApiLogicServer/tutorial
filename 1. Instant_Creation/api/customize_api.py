@@ -1,5 +1,5 @@
 import logging
-import util
+import api.system.api_utils as api_utils
 import safrs
 from flask import request, jsonify
 from safrs import jsonapi_rpc
@@ -14,6 +14,8 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
     """ Customize API - new end points for services 
     
         Brief background: see readme_customize_api.md
+
+        Your Code Goes Here
     
     """
     
@@ -58,7 +60,7 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
 
         Special support for the msg parameter -- Rules Report
         """
-        return util.server_log(request, jsonify)
+        return api_utils.server_log(request, jsonify)
     
     
     @app.route('/metadata')

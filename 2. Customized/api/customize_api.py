@@ -1,9 +1,9 @@
 from functools import wraps
 import logging
 from flask_jwt_extended import get_jwt, jwt_required, verify_jwt_in_request
-from config import Config
+from config.config import Config, Args
 from security.system.authorization import Security
-import util
+import api.system.api_utils as api_utils
 from typing import List
 import safrs
 import sqlalchemy
@@ -12,9 +12,9 @@ from safrs import jsonapi_rpc, SAFRSAPI
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import object_mapper
 from database import models
-from config import Args
 from flask_cors import cross_origin
 from logic_bank.rule_bank.rule_bank import RuleBank
+import integration.system.RowDictMapper as row_dict_mapper
 from integration.row_dict_maps.OrderById import OrderById
 from integration.row_dict_maps.OrderShipping import OrderShipping
 from integration.row_dict_maps.OrderB2B import OrderB2B
@@ -23,11 +23,16 @@ from integration.row_dict_maps.OrderB2B import OrderB2B
 #     Separate from expose_api_models.py, to simplify merge if project rebuilt
 # Called by api_logic_server_run.py
 
-app_logger = logging.getLogger("api_logic_server_app")  # only for create-and-run, no?
+app_logger = logging.getLogger("api_logic_server_app")
 
 def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
-    """ 
-    #### Illustrates Customized APIs and Data Access.
+    """ #als: Customize API - new end points for services 
+    
+    Brief background: see readme_customize_api.md
+
+    Your Code Goes Here
+    
+    Illustrates Customized APIs and Data Access.
 
     1. Observe that APIs not limited to database objects, but are extensible.
     2. See: https://apilogicserver.github.io/Docs/Sample-Integration/
@@ -45,24 +50,21 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
 
     #### Illustrate Using Flask and SQLAlchemy
 
-    1. order_nested_objects() - 
-            * Illustrates: Uses util.format_nested_objects() (-> jsonify(row).json)
-
-    2. join_order() - 
+    1. join_order() - 
             * Illustrates: SQLAlchemy parent join fields
 
-    3. CategoriesEndPoint get_cats() - swagger, row security
-            * Uses util.rows_to_dict            (-> row.to_dict())
+    2. CategoriesEndPoint get_cats() - swagger, row security
+            * Uses row_dict_mapper.rows_to_dict
 
-    4. filters_cats() - model query with filters
+    3. filters_cats() - model query with filters
             * Uses manual result creation (not util)
 
-    5. raw_sql_cats() - raw sql (non-modeled objects)
-            * Uses util.rows_to_dict            (-> iterate attributes)
+    4. raw_sql_cats() - raw sql (non-modeled objects)
+            * Uses row_dict_mapper.rows_to_dict
     
     """
 
-    app_logger.info("..api/expose_service.py, exposing custom services: hello_world, add_order")
+    app_logger.debug("api/customize_api.py - expose custom services")
 
     api.expose_object(ServicesEndPoint)  # Swagger-visible services
     api.expose_object(CategoriesEndPoint)
@@ -107,7 +109,7 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         def wrapper(fn):
             @wraps(fn)
             def decorator(*args, **kwargs):
-                if Args.security_enabled == False:
+                if Args.instance.security_enabled == False:
                     return fn(*args, **kwargs)
                 verify_jwt_in_request(True)  # must be issued if security enabled
                 return fn(*args, **kwargs)
@@ -121,11 +123,11 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
     @cross_origin(supports_credentials=True)
     def OrderShipping_Test():
         """ 
-        Illustrates
+        Illustrates  redundant (declare_logic)
         
         1. SQLAlchemy row retrieval
         
-        2. IntegationService to reformat row as multi-table dict, and then json
+        2. RowDictMapper to reformat row as multi-table dict, and then json
 
         $(venv) ApiLogicServer login --user=admin --password=p
         $(venv) ApiLogicServer curl "http://localhost:5656/OrderShipping_Test?id=10643"
@@ -134,7 +136,7 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         request_id = request.args.get('id')
         if request_id is None:
             request_id = 10643
-        db = safrs.DB           # Use the safrs.DB, not db!
+        db = safrs.DB           # #als: SQLAlchemy retrieval
         session = db.session    # sqlalchemy.orm.scoping.scoped_session
         Security.set_user_sa()  # an endpoint that requires no auth header (see also @bypass_security)
         the_order : models.Order = session.query(models.Order) \
@@ -155,7 +157,7 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         """
         Illustrates: SQLAlchemy join fields, by manual code
 
-        Better: use IntegrationService (next example)
+        Better: use RowDictMapper (see OrderB2B, below)
 
         $(venv) ApiLogicServer curl "http://localhost:5656/join_order?id=11077"
 
@@ -175,7 +177,7 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         dict_row = {}
         dict_row["id"] = the_order.Id
         dict_row["AmountTotal"] = the_order.AmountTotal
-        dict_row["SalesRepLastName"] = the_order.Employee.LastName
+        dict_row["SalesRepLastName"] = the_order.Employee.LastName  # access join field
         return jsonify({"order_with_join_attr":  dict_row})
 
 
@@ -223,7 +225,7 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
     def raw_sql_cats():
         """
         Illustrates:
-        * "Raw" SQLAlchemy table queries (non-mapped objects)
+        * #als: "Raw" SQLAlchemy table queries (non-mapped objects)
         * Observe phyical column name: CategoryName_ColumnName
               * Contrast to models.py, get_cats()
         
@@ -235,41 +237,9 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         sql_query = DB.text("SELECT * FROM CategoryTableNameTest")
         with DB.engine.begin() as connection:
             query_result = connection.execute(sql_query).all()
-            rows_to_dict_rows = util.rows_to_dict(query_result)
+            rows_to_dict_rows = row_dict_mapper.rows_to_dict(query_result)
         response = {"result": rows_to_dict_rows} 
         return response
-
-
-    @app.route('/order_nested_objects')
-    def order_nested_objects():
-        """
-        Illustrates:
-        * Returning a nested result set response
-        * Using SQLAlchemy to obtain data, and related data
-        * Restructuring row results to desired json (e.g., for tool such as Sencha)
-
-        Test (auth optional):
-            http://localhost:5656/order_nested_objects?Id=10643
-            curl -X GET "http://localhost:5656/order_nested_objects?Id=10643"
-
-        """
-        order_id = request.args.get('Id')
-        db = safrs.DB         # Use the safrs.DB, not db!
-        session = db.session  # sqlalchemy.orm.scoping.scoped_session
-        order = session.query(models.Order).filter(models.Order.Id == order_id).one()
-
-        result_std_dict = util.format_nested_object(order
-                                        , replace_attribute_tag='data'
-                                        , remove_links_relationships=True)
-        result_std_dict['data']['Customer_Name'] = order.Customer.CompanyName # eager fetch
-        result_std_dict['data']['OrderDetailListAsDicts'] = []
-        for each_order_detail in order.OrderDetailList:       # lazy fetch
-            each_order_detail_dict = util.format_nested_object(row=each_order_detail
-                                                    , replace_attribute_tag='data'
-                                                    , remove_links_relationships=True)
-            each_order_detail_dict['data']['ProductName'] = each_order_detail.Product.ProductName
-            result_std_dict['data']['OrderDetailListAsDicts'].append(each_order_detail_dict)
-        return result_std_dict
 
 
     ###################
@@ -281,7 +251,7 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         """
         Used by test/*.py - enables client app to log msg into server's console log
         """
-        return util.server_log(request, jsonify)
+        return api_utils.server_log(request, jsonify)
 
     
     @app.route('/metadata')
@@ -361,13 +331,15 @@ def expose_services(app, api, project_dir, swagger_host: str, PORT: str):
         return jsonify({ "success": True, "message": "Server is shutting down..." })
 
 
+"""
+Illustrates #als: custom end point with swagger, RowDictMapper
+
+* Custom service - visible in swagger
+* Services *not* requiring authentication (contrast to CategoriesEndPoint, below)
+* Use OrderB2B (extends RowDictMapper) to map json to rows with aliasing, joins and lookups
+* Recall business logic is not in service, but encapsulated for reuse in logic/declare_logic.py
+"""
 class ServicesEndPoint(safrs.JABase):
-    """
-    Illustrates
-    * Custom service - visible in swagger
-    * Services *not* requiring authentication (contrast to CategoriesEndPoint, below)
-    * Recall business logic is not in service, but encapsulated for reuse in logic/declare_logic.py
-    """
 
 
     @classmethod
@@ -486,25 +458,25 @@ class ServicesEndPoint(safrs.JABase):
         new_order = models.Order()
         session.add(new_order)
 
-        util.json_to_entities(kwargs, new_order)  # generic function - any db object
+        row_dict_mapper.json_to_entities(kwargs, new_order)  # generic function - any db object
         return {"Thankyou For Your Order"}  # automatic commit, which executes transaction logic
 
 
 
+"""
+Illustrates #als: auth required
+* Swagger-visible RPC that requires authentication (@jwt_required()).
+* Row Security
+
+Test in swagger (auth required)
+* Post to endpoint auth to obtain <access_token> value - copy to clipboard
+        * Row Security - Users determines results
+        * u1 - 1 row, u2 - 4 rows, admin - 9 rows
+* Authorize (top of swagger), using Bearer <access_token>
+* Post to CategoriesEndPoint/get_cats, observe results depend on login
+
+"""
 class CategoriesEndPoint(safrs.JABase):
-    """
-    Illustrates
-    * Swagger-visible RPC that requires authentication (@jwt_required()).
-    * Row Security
-
-    Test in swagger (auth required)
-    * Post to endpoint auth to obtain <access_token> value - copy to clipboard
-            * Row Security - Users determines results
-            * u1 - 1 row, u2 - 4 rows, admin - 9 rows
-    * Authorize (top of swagger), using Bearer <access_token>
-    * Post to CategoriesEndPoint/get_cats, observe results depend on login
-
-    """
 
     @staticmethod
     @jwt_required()
@@ -516,6 +488,6 @@ class CategoriesEndPoint(safrs.JABase):
         result = session.query(models.Category)
         for each_row in result:
             app_logger.debug(f'each_row: {each_row}')
-        rows = util.rows_to_dict(result)
+        rows = row_dict_mapper.rows_to_dict(result)
         response = {"result": rows}
         return response

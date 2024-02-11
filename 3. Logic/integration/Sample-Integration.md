@@ -87,7 +87,9 @@ One command has created meaningful elements of our system:
 
 
 &nbsp;
-**Key Takeways -  Instant Self-Serve API - ad hoc integration - and Admin App**
+**Key Takeways - Instant Self-Serve API - ad hoc integration - and Admin App**
+&nbsp;
+
 ### API: Ad hoc Integration
 
 The system creates an API with end points for each table, providing filtering, sorting, pagination, optimistic locking and related data access.
@@ -103,6 +105,10 @@ The `create` command also creates an Admin App: multi-page, multi-table with aut
 You can click the first Customer, and see their Orders, and Items.
 
 <img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/integration/admin-app-initial.jpeg?raw=true">
+
+!!! pied-piper ":bulb: 1 Command: Ad Hoc Integration Complete"
+
+    With 1 command, we have created an executable project that completes our ad hoc integration with a self-serve API.  We have also unblocked custom UI development.
 
 &nbsp;
 
@@ -150,7 +156,7 @@ ApiLogicServer add-cust
 
 To enable Kafka:
 
-1. In `config.py`, find and comment out: `KAFKA_PRODUCER = None  # comment out to enable Kafka`
+1. In `conf/config.py`, find and comment out: `KAFKA_PRODUCER = None  # comment out to enable Kafka`
 
 2. Update your `etc/conf` to include the lines shown below (e.g., `sudo nano /etc/hosts`).
 
@@ -214,13 +220,16 @@ Such logic (multi-table derivations and constraints) is a significant portion of
 
 
 &nbsp;
-**Key Takeways -  Logic: Multi-table Derivation and Constraint Rules, 40X More Concise**
+**Key Takeways - Logic: Multi-table Derivation and Constraint Rules, 40X More Concise**
+&nbsp;
 
 #### IDE: Declare and Debug
 
 The 5 check credit rules are shown below.  
 
-> Rules are 40X more concise than legacy code, as [shown here](https://github.com/valhuber/LogicBank/wiki/by-code).
+!!! pied-piper ":bulb: Rules are 40X More Concise Than Code"
+
+    Rules are 40X more concise than legacy code, as [shown here](https://github.com/valhuber/LogicBank/wiki/by-code).
 
 Rules are declared in Python, simplified with IDE code completion.  The `add-cust` process above has simulated the process of using your IDE to declare logic.
 
@@ -237,7 +246,7 @@ These same rules also govern changing orders, deleting them, picking different p
 
 #### Agility, Quality
 
-Rules are a unique and signifcant innovation, providing meaningful improvements over procedural logic:
+Rules are a unique and significant innovation, providing meaningful improvements over procedural logic:
 
 | CHARACTERISTIC | PROCEDURAL | DECLARATIVE | WHY IT MATTERS |
 | :--- |:---|:---|:---|
@@ -264,10 +273,12 @@ To see security in action:
 
 
 &nbsp;
-**Key Takeways -  Security: Customers Filtered**
+**Key Takeways - Row-Level Security: Customers Filtered**
+&nbsp;
+
 #### Login, Row Filtering
 
-Observe you now see only customer ALFKI, per the secuity declared below.  Note the console log at the bottom shows how the filter worked.
+Declarative row-level security ensures that users see only the rows authorized for their roles.  Observe you now see only customer ALFKI, per the security declared below.  Note the console log at the bottom shows how the filter worked.
 
 <img src="https://github.com/ApiLogicServer/Docs/blob/main/docs/images/integration/security-filters.jpg?raw=true">
 
@@ -302,11 +313,16 @@ The main task here is to ***map*** a B2B payload onto our logic-enabled SQLAlche
 
 ![dict to row](https://github.com/ApiLogicServer/Docs/blob/main/docs/images/integration/dict-to-row.jpg?raw=true)
 
-So, our custom endpoint required about 7 lines of code, along with the API specification on the right.
+
+&nbsp;
+**Key Takeways - Custom Endpoint - 7 lines of code**
+&nbsp;
+
+    So, our custom endpoint required about 7 lines of code, along with the API specification on the right.  Note the logic is automatically factored out, and re-used for all APIs, both custom and self-serve.
 
 &nbsp;
 
-### Send `OrderShipping` Message
+### Produce `OrderShipping` Message
 
 Successful orders need to be sent to Shipping, again in a predesignated format.
 
@@ -326,6 +342,13 @@ Just as you can customize apis, you can complement rule-based logic using Python
 3. `send_order_to_shipping` uses the `OrderShipping` class, which maps our SQLAlchemy order row to a dict (`row_to_dict`).
 
 ![send order to shipping](https://github.com/ApiLogicServer/Docs/blob/main/docs/images/integration/order-to-shipping.jpg?raw=true)
+
+
+&nbsp;
+**Key Takeways - Extensible Rules, Kafka Message Produced**
+&nbsp;
+
+    Rule-based logic is extensible with Python, here producing a Kafka message with 20 lines of code.
 
 &nbsp;
 
@@ -357,7 +380,7 @@ To consume messages:
 
 **1. Enable Consumption**
 
-Shipping is pre-configured to enable message consumption with a setting in `config.py`:
+Shipping is pre-configured to enable message consumption with a setting in `conf/config.py`:
 
 ```python
 KAFKA_CONSUMER = '{"bootstrap.servers": "localhost:9092", "group.id": "als-default-group1", "auto.offset.reset":"smallest"}'
@@ -365,7 +388,7 @@ KAFKA_CONSUMER = '{"bootstrap.servers": "localhost:9092", "group.id": "als-defau
 
 When the server is started in `api_logic_server_run.py`, it invokes `integration/kafka/kafka_consumer.py#flask_consumer`.  This calls the pre-supplied `FlaskKafka`, which takes care of the Kafka listening, thread management, and the `handle` annotation used below.
 
-> `FlaskKafka` was inspired by the work of Nimrod (Kevin) Maina, in [this project](https://pypi.org/project/flask-kafka/).  Many thanks.
+> `FlaskKafka` was inspired by the work of Nimrod (Kevin) Maina, in [this project](https://pypi.org/project/flask-kafka/).  Many thanks!
 
 &nbsp;
 
