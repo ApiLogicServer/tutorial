@@ -1,7 +1,7 @@
 ---
 title: Declarative Application Integration
 notes: gold docsite, 2100 words (goal: 1500)
-version: 10.0.1 from docsite, for readme
+version: 10.03.01 from docsite, for readme
 ---
 
 # Purpose
@@ -147,7 +147,6 @@ ApiLogicServer add-cust
 
 **3. Enable and Start Kafka**
 
-
 <details markdown>
 
 <summary>Show me how</summary>
@@ -180,10 +179,36 @@ To enable Kafka:
 127.0.0.1 kubernetes.docker.internal
 # End of section
 ```
-3. Start Kafks: in a terminal window: `docker compose -f integration/kafka/dockercompose_start_kafka.yml up`
+3. If you already created the container, you can
+
+    1. Start it in the Docker Desktop, and
+    2. **Skip the next 2 steps;** otherwise...
+
+4. Start Kafka: in a terminal window: `docker compose -f integration/kafka/dockercompose_start_kafka.yml up`
+
+5. Create topic: in Docker: `kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 3  --topic order_shipping`
+
+Here some useful Kafka commands:
+
+```bash
+# use Docker Desktop > exec, or docker exec -it broker1 bash 
+# in docker terminal: set prompt, delete, create, monnitor topic, list all topics
+# to clear topic, delete and create
+
+PS1="kafka > "  # set prompt
+
+kafka-topics.sh --bootstrap-server localhost:9092 --topic order_shipping --delete
+
+kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 3  --topic order_shipping
+
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic order_shipping --from-beginning
+
+kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
 
 </details>
 
+&nbsp;
 
 **4. Restart the server, login as `admin`**
 
@@ -435,6 +460,7 @@ ApiLogicServer curl "'POST' 'http://localhost:5656/api/ServicesEndPoint/OrderB2B
     }
 }}}'
 ```
+
 &nbsp;
 
 # Summary

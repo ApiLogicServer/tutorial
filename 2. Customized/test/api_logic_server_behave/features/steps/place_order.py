@@ -10,9 +10,13 @@ logic_logs_dir = "logs/scenario_logic_logs"
 """
 Implement behave tests - Your Code Goes Here
 
-These tests can be re-run -- they restore the data to original state.
+These tests can be re-run after successful runs
+
+* They restore the data to original state.
+* But, if tests fail, database may have been altered (restore then required)
 
 Rows used for testing:
+
 * customer: ALFKI, with a balance of 2102
 * order: 10643, with an amount 1086
 * orderdetail: 1040
@@ -54,9 +58,23 @@ def step_impl(context):
 @when('Good Order Placed')
 def step_impl(context):
     """
+    Familiar logic patterns:
+
+    * Constrain a derived result (Check Credit)
+    * Chain up, to adjust parent sum/count aggregates (AmountTotal, Balance)
+    * Events for Lib Access (Kafka, email messages)
+
+    Logic Design ("Cocktail Napkin Design")
+
+    * Customer.Balance <= CreditLimit
+    * Customer.Balance = Sum(Order.AmountTotal where unshipped)
+    * Order.AmountTotal = Sum(OrderDetail.Amount)
+    * OrderDetail.Amount = Quantity * UnitPrice
+    * OrderDetail.UnitPrice = copy from Product
+
     We place an Order with an Order Detail.  It's one transaction.
 
-    Note how the `Order.OrderTotal` and `Customer.Balance` are *adjusted* as Order Details are processed.
+    Note how the `Order.AmountTotal` and `Customer.Balance` are *adjusted* as Order Details are processed.
     Similarly, the `Product.UnitsShipped` is adjusted, and used to recompute `UnitsInStock`
 
     <figure><img src="https://github.com/valhuber/ApiLogicServer/wiki/images/behave/declare-logic.png?raw=true"></figure>
@@ -119,6 +137,8 @@ def step_impl(context):
 @then('Logic adjusts Balance (demo: chain up)')
 def step_impl(context):
     before = context.alfki_before
+    assert before.Balance == 2102.0, "Looks like database does not have starting values"
+
     expected_adjustment = 56  # find this from inspecting data on test run
     after = get_ALFLI()
     context.alfki_after = after
@@ -130,9 +150,22 @@ def step_impl(context):
     assert True is not False
 
 
+@then('Logic sends kafka message')
+def step_impl(context):
+    stub = False
+    if stub:
+        assert True == True
+    else:
+        scenario_name = context.scenario.name
+        scenario_trunc = get_truncated_scenario_name(scenario_name)
+        logic_file_name = f'{logic_logs_dir}/{scenario_trunc}.log'
+        assert test_utils.does_file_contain(search_for="Sending Order to Shipping", in_file=logic_file_name), \
+            "Logic Log does not contain 'Sending Order to Shipping'"
+
+
 @then('Logic sends email to salesrep')
 def step_impl(context):
-    stub = True
+    stub = False
     if stub:
         assert True == True
     else:
@@ -151,7 +184,7 @@ def step_impl(context):
 @then('Logic adjusts aggregates down on delete order')
 def step_impl(context):
     scenario_name = 'Good Order Custom Svc - cleanup'
-    test_utils.prt(f'\n\n\n{scenario_name} - verify credit check response...\n', scenario_name)
+    test_utils.prt(f'\n\n\n{scenario_name} - verify credit check response...\n', scenario_name+'dlt')
     # find ALFKI order with freight of 11 and delete it (hmm... cannot get created id)
     order_uri = "http://localhost:5656/api/Order/?include=Customer&fields%5BOrder%5D=Id%2CCustomerId%2CEmployeeId%2COrderDate%2CRequiredDate%2CShippedDate%2CShipVia%2CFreight%2CShipName%2CShipAddress%2CShipCity%2CShipRegion%2CShipPostalCode%2CShipCountry%2CAmountTotal%2CCountry%2CCity%2CReady%2COrderDetailCount&page%5Boffset%5D=0&page%5Blimit%5D=10&sort=Id%2CCustomerId%2CEmployeeId%2COrderDate%2CRequiredDate%2CShippedDate%2CShipVia%2CFreight%2CShipName%2CShipAddress%2CShipCity%2CShipRegion%2CShipPostalCode%2CShipCountry%2CAmountTotal%2CCountry%2CCity%2CReady%2COrderDetailCount%2Cid&filter%5BCustomerId%5D=ALFKI&filter%5BFreight%5D=11"
     r = requests.get(url=order_uri, headers= test_utils.login())
@@ -182,14 +215,59 @@ def step_impl(context):
 
     assert True is not False
 
+
+@when('Order Shipped with no Items')
+def step_impl(context):
+    """
+    Reuse the rules for Good Order...
+
+    Familiar logic patterns:
+
+    * Constrain a derived result
+    * Counts as existence checks
+
+    Logic Design ("Cocktail Napkin Design")
+
+    * Constraint: do_not_ship_empty_orders()
+    * Order.OrderDetailCount = count(OrderDetail)
+
+    """
+    scenario_name = 'Bad Ship of Empty Order'
+    add_order_uri = f'http://localhost:5656/api/ServicesEndPoint/add_order'
+    add_order_args = {
+        "meta": {
+            "method": "add_order",
+            "args": {
+                "CustomerId": "ALFKI",
+                "ShippedDate": "2013-10-13",
+                "EmployeeId": 1,
+                "Freight": 10,
+            }
+        }
+    }
+    test_utils.prt(f'\n\n\n{scenario_name} - verify credit check response...\n', 
+        scenario_name)
+    r = requests.post(url=add_order_uri, json=add_order_args)
+    context.response_text = r.text
+
+@then('Rejected per Do Not Ship Empty Orders')
+def step_impl(context):
+    response_text = context.response_text
+    assert "Cannot Ship Empty" in response_text, f'Error - "Cannot Ship Empty not in {response_text}'
+
+
 @when('Order Placed with excessive quantity')
 def step_impl(context):
     """
+    Reuse the rules for Good Order...
+
     Familiar logic patterns:
+
     * Constrain a derived result
     * Chain up, to adjust parent sum/count aggregates
 
     Logic Design ("Cocktail Napkin Design")
+
     * Customer.Balance <= CreditLimit
     * Customer.Balance = Sum(Order.AmountTotal where unshipped)
     * Order.AmountTotal = Sum(OrderDetail.Amount)
@@ -228,8 +306,9 @@ def step_impl(context):
 
 @then('Rejected per Check Credit')
 def step_impl(context):
+    """"""
     response_text = context.response_text
-    print( "one last thing", "by the way", "\n")
+    print( "one last thing", "by the way", "\n")  # exploring behave
     assert "exceeds credit" in response_text, f'Error - "exceeds credit not in {response_text}'
     # behave.log_capture.capture("THIS IS behave.log_capture.capture")
 
@@ -304,6 +383,15 @@ def step_impl(context):
 @when('Order ShippedDate altered (2013-10-13)')
 def step_impl(context):
     """
+
+    Logic Patterns:
+
+    * Chain Down
+
+    Logic Design ("Cocktail Napkin Design")
+
+    * Formula: OrderDetail.ShippedDate = Order.ShippedDate
+
     We set `Order.ShippedDate`.
 
     This cascades to the Order Details, per the `derive=models.OrderDetail.ShippedDate` rule.

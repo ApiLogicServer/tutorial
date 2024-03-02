@@ -116,7 +116,7 @@ def declare_logic():
 
         Format row per shipping requirements, and send (e.g., a message)
 
-        NB: the after_flush event makes Order.Id avaible.  Contrast to congratulate_sales_rep().
+        NB: the after_flush event makes Order.Id available.  Contrast to congratulate_sales_rep().
 
         Args:
             row (models.Order): inserted Order
@@ -132,6 +132,18 @@ def declare_logic():
             
     Rule.after_flush_row_event(on_class=models.Order, calling=send_order_to_shipping)  # see above
 
+    def do_not_ship_empty_orders(row: models.Order, old_row: models.Order, logic_row: LogicRow) -> bool:
+        return_value = True
+        if row.OrderDetailCount == 0:  # an empty order... error if trying to ship...
+            if logic_row.is_inserted() and row.ShippedDate is not None:
+                return_value = False
+            if logic_row.is_updated() and row.ShippedDate is not None:
+                return_value = False
+        return return_value
+    
+    Rule.constraint(validate=models.Order,
+                    calling=do_not_ship_empty_orders,
+                    error_msg="Cannot Ship Empty Orders")
 
     def congratulate_sales_rep(row: models.Order, old_row: models.Order, logic_row: LogicRow):
         """ use events for sending email, messages, etc. """
@@ -255,9 +267,11 @@ def declare_logic():
             tedious = False  # tedious code to repeat for every audited class
             if tedious:      # see instead the RuleExtension.copy_row above (you can create similar rule extensions)
                 if logic_row.ins_upd_dlt == "upd" and logic_row.are_attributes_changed([models.Employee.Salary, models.Employee.Title]):
+                    # #als: triggered inserts  
                     copy_to_logic_row = logic_row.new_logic_row(models.EmployeeAudit)
                     copy_to_logic_row.link(to_parent=logic_row)
                     copy_to_logic_row.set_same_named_attributes(logic_row)
+                    # copy_to_logic_row.row.attribute_name = value
                     copy_to_logic_row.insert(reason="Manual Copy " + copy_to_logic_row.name)  # triggers rules...
 
         Rule.commit_row_event(on_class=models.Employee, calling=audit_by_event)
@@ -303,5 +317,8 @@ def declare_logic():
         
     Rule.formula(derive=models.Order.OrderDate, 
                  as_expression=lambda row: datetime.datetime.now())
+    
+    from api.system import api_utils
+    # api_utils.rules_report()
     
     app_logger.debug("..logic/declare_logic.py (logic == rules + code)")

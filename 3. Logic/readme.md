@@ -28,10 +28,10 @@ In this tutorial, we will explore:
 This tutorial illustrates some key concepts:
 
 #### _Declarative Models_, not code
-Observe that the files for the Admin App and API are models that describe _what, not how_.  This is much easier to understand than large amounts of generated code.
+Observe that the files for the Admin App and API are models that describe _what, not how_.  This level of abstratction is much easier to understand than large amounts of generated code.
 
 #### Customize - using standard tools
-The system is designed for you to customize the UI, Logic, Security and API, using standard tools - your IDE for code editing/debugging, git, etc.
+The system is designed for you to customize the UI, Logic, Security and API, using standard tools - your IDE for code editing / debugging, git, etc.
 
 #### Iterate - Preserve Customizations
 The system is designed to enable `rebuild`, so you can iterate the data model - _without losing your customizations._  In general, such customizations are kept in separate files from the model files.  So, the model files can be rebuilt without affecting customization files.
@@ -43,7 +43,7 @@ A unique feature of API Logic Server is provision for spreadsheet-like rules, cu
 
 # Development Overview
 
-[![Using VS Code](https://github.com/valhuber/apilogicserver/wiki/images//creates-and-runs-video.jpg?raw=true?raw=true)](https://youtu.be/tOojjEAct4M "Using VS Code with the ApiLogicServer container - click for video")
+[![Using VS Code](https://github.com/valhuber/apilogicserver/wiki/https://github.com/ApiLogicServer/Docs/blob/main/docs/images//creates-and-runs-video.jpg?raw=true?raw=true)](https://youtu.be/tOojjEAct4M "Using VS Code with the ApiLogicServer container - click for video")
 
 The diagram above summarizes the create / run / customize process.
 
@@ -53,7 +53,9 @@ The diagram above summarizes the create / run / customize process.
 
 ## 1. Create: Instant Project
 
-The CLI command below creates an `ApiLogicProject` by reading your schema.  Note: the `db_url` value is [an abbreviation](https://apilogicserver.github.io/Docs/Data-Model-Examples/); you would normally supply a SQLAlchemy URL.  
+The CLI command below creates an `ApiLogicProject` by reading your schema.  
+
+Note: the `db_url` value is defaulted to the pre-installed sample project; you would normally supply a SQLAlchemy URL.  
 
 ```bash
 $ ApiLogicServer create --project_name= --db_url=    # create ApiLogicProject
@@ -75,7 +77,7 @@ The system has created an API and an Admin App.  Let's explore them.
 
 ### 2.a Self-Serve API: Ad hoc Integration
 
-The system creates an API with end points for each table, providing filtering, sorting, pagination, optimistic locking and related data access.
+The system creates a JSON:API with end points for each table, providing filtering, sorting, pagination, optimistic locking and related data access.
 
 The API is [**self-serve**](https://apilogicserver.github.io/Docs/API-Self-Serve/): consumers can select their own attributes and related data, eliminating reliance on custom API development.  Our self-serve API meets requirements for Ad Hoc Application Integration, and Custom UI Dev.
 
@@ -90,7 +92,7 @@ After starting the server and browser, explore the Admin App in your browser:
 1. Navigate to `Customer`
       * Depending on your screen size, you may need to hit the "hamburger menu" (top left) to see the left menu<br/><br/>
 2. Click the first Customer row  to see Customer Details
-3. Observe the `ORDERLIST` tab at the bottom
+3. Click the `ORDERLIST` tab at the bottom
 4. Click the first Order row
 5. Observe the `ORDERDETAILLIST` tab at the bottom
 6. Observe the elements shown in the diagram
@@ -102,7 +104,7 @@ After starting the server and browser, explore the Admin App in your browser:
 
 <figure><img src="https://github.com/valhuber/apilogicserver/wiki/images/ui-admin/run-admin-app.png?raw=true"></figure>
 
-> **Key Takeaway: API/UI *Automation***<br>With 1 command, we have created an executable project with a self-serve API, for ad hoc application integration and custom UI development.  Our Admin App can be used for agile business user collaboration.
+> **Key Takeaway: *Microservice Automation***<br>With **1 command**, we have created an executable project with a **self-serve API**, for ad hoc application integration and custom UI development.  Our **Admin App** can be used for agile business user collaboration.
 
 &nbsp;
 
@@ -154,7 +156,7 @@ In the sections below, we will explore:
 
 ### 3.a Customize UI: Declare UI Behavior
 
-The admin app is not built with complex html and javascript.  Instead, it is configured with the `ui/admin/admin.yml`, automatically created from your data model by `ApiLogicServer create`.
+The admin app is not built with complex html and javascript.  Instead, it is *configured* with  `ui/admin/admin.yml`, automatically created from your data model by `ApiLogicServer create`.
 
 You can customize this file in your IDE to control which fields are shown (including joins), hide/show conditions, help text etc.  The `add-cust` process above has simulated such customizations.
 
@@ -227,7 +229,13 @@ Rules are a unique and significant innovation, providing meaningful improvements
 
 &nbsp;
 
-> Key Takeway -  Logic: Multi-table Derivation and Constraint Rules, 40X More Concise.  <br>For more on rules, [click here](https://apilogicserver.github.io/Docs/Logic-Why/).
+> **Key Takeway -  Logic:** Multi-table Derivation and Constraint Rules, Extensible with Python 
+<br><br>Rules are:
+<br>1. **Declared** in your IDE - 40X more concise
+<br>2. **Activated** on server start
+<br>3. **Executed** - *automatically* -  on updates (using SQLAlchemy events)
+<br>4. **Debugged** in your IDE, and with the console log
+<br><br>For more on rules, [click here](https://apilogicserver.github.io/Docs/Logic-Why/).
 
 &nbsp;
 
@@ -239,7 +247,9 @@ To see security in action:
 
 **1. Logout (upper right), and Login** as `AFLKI`, password `p`
 
-**2. Click Customer** - observe you now see only 1 customer
+    * This authorized user has 2 roles: `customer` and 'tenant`
+
+**2. Click Customer** - observe you now see only 1 customer (per the `customer` role)
 
 <br>
 
@@ -516,8 +526,8 @@ For information on Managing API Logic Projects, [click here](https://apilogicser
 
 | About                    | Info                               |
 |:-------------------------|:-----------------------------------|
-| Created                  | February 11, 2024 12:12:18                      |
-| API Logic Server Version | 10.02.02           |
+| Created                  | March 02, 2024 11:42:54                      |
+| API Logic Server Version | 10.03.11           |
 | Created in directory     | /Users/val/dev/ApiLogicServer/ApiLogicServer-dev/org_git/tutorial/1. Instant_Creation |
 | API Name                 | api          |
 | Execution begins with    | `api_logic_server_run.py`          |

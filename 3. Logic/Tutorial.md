@@ -52,7 +52,7 @@ A unique feature of API Logic Server is provision for spreadsheet-like rules, cu
 
 ## Create
 
-[![Using VS Code](https://github.com/valhuber/apilogicserver/wiki/images//creates-and-runs-video.jpg?raw=true?raw=true)](https://youtu.be/tOojjEAct4M "Using VS Code with the ApiLogicServer container - click for video")
+[![Using VS Code](https://github.com/valhuber/apilogicserver/wiki/https://github.com/ApiLogicServer/Docs/blob/main/docs/images//creates-and-runs-video.jpg?raw=true?raw=true)](https://youtu.be/tOojjEAct4M "Using VS Code with the ApiLogicServer container - click for video")
 
 The diagram above summarizes the create / run / customize process.  When you issue the `ApiLogicServer create` CLI command, the system reads your schema and creates a customizable API Logic Project.
 
